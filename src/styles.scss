@@ -1,0 +1,33 @@
+/* You can add global styles to this file, and also import other style files */
+
+.full-width {
+    width: 100%;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    background-color: transparent;
+    border-spacing: 0;
+    border-collapse: collapse;
+
+
+    thead {
+        // margin-bottom: 5px;
+        // border-bottom: 1px solid #eee;
+    }
+
+    td {
+        text-align: center;
+        padding: 5px;
+    }
+}
+
+.pull-right {
+    float: right;
+}
+
+.pull-left {
+    float: left;
+}

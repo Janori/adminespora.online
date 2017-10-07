@@ -3,6 +3,7 @@ import {TdDataTableService} from '@covalent/core';
 import {ResizeService} from '../../resize/resize.service';
 import {routerAnimation} from '../../utils/page.animation';
 import {AREA_CHART_OPTION, AREA_CHART_WITH_LINE_OPTION, DOUGHNUT_OPTION, INIDICATOR_ITEMS} from './chart-models';
+import {CHART_TEXT_COLOR, MAT_DEEP_ORANGE, MAT_LIGHT_BLUE} from '../../utils/colors';
 
 @Component({
   selector: 'app-home',
@@ -30,29 +31,154 @@ export class HomeComponent implements OnInit , OnDestroy {
   // Model for doughnut chart
   doughnutOption;
   // Project list items
-  projectItems = [
-    {
-      avatar: '/assets/avatars-img/4040.png',
-      title: 'Claudette Girard',
-      text: 'Posted 2 photos in ',
-      project: 'Project 1',
-      date: 'Today'
-    },
-    {
-      avatar: '/assets/avatars-img/4040.png',
-      title: 'Michele Pitts',
-      text: 'Left comment in ',
-      project: 'Project 2',
-      date: '2 May'
-    },
-    {
-      avatar: '/assets/avatars-img/4040.png',
-      title: 'Crystal Stewart',
-      text: 'Upload one files in ',
-      project: 'Project 3',
-      date: '4 April'
-    }
+
+  quickActions = [
+    'Crear Usuario',
+    'Crear Propietario',
+    'Crear Inmueble',
+    'Crear Arrendatario'
   ];
+
+  simpleBarChartOption = {
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      data: ['Bar 1', 'Bar 2'],
+      bottom: 0,
+      textStyle: {
+        color: CHART_TEXT_COLOR
+      }
+    },
+    toolbox: {
+      show: true,
+      feature: {
+        magicType: {
+          show: true,
+          type: ['line', 'bar'],
+          title: {
+            line: 'Line',
+            bar: 'Bar',
+            textStyle: {
+              color: CHART_TEXT_COLOR
+            }
+          }
+        },
+        saveAsImage: {
+          show: true,
+          title: 'Save',
+          textStyle: {
+            color: CHART_TEXT_COLOR
+          }
+        }
+      }
+    },
+    calculable: true,
+    xAxis: [
+      {
+        type: 'category',
+        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+        axisLabel: {
+          textStyle: {
+            color: CHART_TEXT_COLOR
+          }
+        },
+        axisTicks: {
+          lineStyle: {
+            color: CHART_TEXT_COLOR
+          }
+        },
+        axisLine: {
+          lineStyle: {
+            color: CHART_TEXT_COLOR
+          }
+        }
+      },
+    ],
+    yAxis: [
+      {
+        type: 'value',
+        axisLabel: {
+          textStyle: {
+            color: CHART_TEXT_COLOR
+          }
+        },
+        axisTicks: {
+          lineStyle: {
+            color: CHART_TEXT_COLOR
+          }
+        },
+        axisLine: {
+          lineStyle: {
+            color: CHART_TEXT_COLOR
+          }
+        }
+      }
+    ],
+    series: [
+      {
+        name: 'Bar 1',
+        type: 'bar',
+        data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+        markPoint: {
+          data: [
+            {type: 'max', name: 'Max'},
+            {type: 'min', name: 'Min'}
+          ]
+        },
+        markLine: {
+          data: [
+            {type: 'average', name: 'Average'}
+          ]
+        },
+        itemStyle: {
+          normal: {
+            color: MAT_LIGHT_BLUE._500
+          }
+        }
+      },
+      {
+        name: 'Bar 2',
+        type: 'bar',
+        data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+        markPoint: {
+          data: [
+            {name: 'Mark 1', value: 182.2, xAxis: 7, yAxis: 183},
+            {name: 'Mark 2', value: 2.3, xAxis: 11, yAxis: 3}
+          ]
+        },
+        markLine: {
+          data: [
+            {type: 'average', name: '平均值'}
+          ]
+        },
+        itemStyle: {
+          normal: {
+            color: MAT_DEEP_ORANGE._500
+          }
+        }
+      }
+    ]
+  };
+
+  arrendatariosDeudores = [
+      {
+          id: Math.floor((Math.random() * 1000) + 1),
+          nombre: 'Jonathan Anaya',
+          fecha: '2017-09-21'
+      },
+      {
+          id: Math.floor((Math.random() * 1000) + 1),
+          nombre: 'Alan Brito',
+          fecha: '2017-09-20'
+      },
+      {
+          id: Math.floor((Math.random() * 1000) + 1),
+          nombre: 'Rosa la rasposa',
+          fecha: '2017-09-21'
+      }
+  ];
+
   // Items for card with linecharts
   indicatorItems = [];
   // Rating list items
@@ -119,5 +245,13 @@ export class HomeComponent implements OnInit , OnDestroy {
 
   ngOnDestroy(): void {
     this.resizeSubscription.unsubscribe();
+  }
+
+  getAnimatedBarData() {
+    const data = [];
+    for (let i = 0; i < 100; i++) {
+      data.push((Math.sin(i / 5) * (i / 5 - 10) + i / 6) * 5);
+    }
+    return data;
   }
 }

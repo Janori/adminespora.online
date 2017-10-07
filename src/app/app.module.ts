@@ -8,6 +8,7 @@ import { routing, appRoutingProviders} from './app.routing';
 import {PerfectScrollbarConfigInterface, PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {CustomFormsModule} from 'ng2-validation';
+import { LOCALE_ID } from '@angular/core';
 import {
   CovalentCommonModule,
   CovalentDataTableModule,
@@ -63,12 +64,14 @@ export function createTranslateLoader(http: HttpClient) {
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './dashboard/home/home.component';
+import { DummyTableComponent } from './dashboard/dummy-table/dummy-table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    HomeComponent
+    HomeComponent,
+    DummyTableComponent
   ],
   imports: [
     BrowserModule,
@@ -126,7 +129,10 @@ import { HomeComponent } from './dashboard/home/home.component';
     }),
     routing
   ],
-  providers: [ appRoutingProviders ],
+  providers: [
+       { provide: LOCALE_ID, useValue: 'es-MX' },
+      appRoutingProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
