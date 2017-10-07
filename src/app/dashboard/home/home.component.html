@@ -1,0 +1,216 @@
+<section fxLayout="column" fxLayout.gt-md="row">
+  <div fxFlex="50" fxLayout="column">
+    <md-card fxFlex>
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+          <h5 class="font-w-light secondary-text-color">Web statistics</h5>
+        </div>
+        <div fxLayout="row">
+          <md-tab-group fxHide.lt-md="true">
+            <md-tab>
+              <ng-template mdTabLabel>All time</ng-template>
+            </md-tab>
+            <md-tab>
+              <ng-template mdTabLabel>2017</ng-template>
+            </md-tab>
+            <md-tab>
+              <ng-template mdTabLabel>2016</ng-template>
+            </md-tab>
+          </md-tab-group>
+          <div>
+            <button md-icon-button [mdMenuTriggerFor]="menuAbove">
+              <md-icon class="secondary-text-color">more_vert</md-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div echarts [options]="areaChartOption" (chartInit)="chartInstances.push($event)" class="area-chart"></div>
+    </md-card>
+    <md-card fxFlex class="indicator-card">
+      <div fxLayout="row" fxLayoutWrap>
+        <div *ngFor="let item of indicatorItems" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25"
+             class="indicator-item text-center">
+          <h5 class="font-w-light secondary-text-color">{{item.title}}</h5>
+          <p>
+            <md-icon *ngIf="item.increase">expand_less</md-icon>
+            <md-icon *ngIf="!item.increase">expand_more</md-icon>
+            <span>{{item.value}}</span>
+          </p>
+          <div echarts [options]="item.option" (chartInit)="chartInstances.push($event)" class="indicator-chart"></div>
+        </div>
+      </div>
+    </md-card>
+    <md-card fxFlex class="rating-card">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+          <h5 class="font-w-light secondary-text-color">Rating</h5>
+        </div>
+        <md-tab-group fxHide.lt-md="true">
+          <md-tab>
+            <ng-template mdTabLabel>Week</ng-template>
+          </md-tab>
+          <md-tab>
+            <ng-template mdTabLabel>Month</ng-template>
+          </md-tab>
+          <md-tab>
+            <ng-template mdTabLabel>Year</ng-template>
+          </md-tab>
+        </md-tab-group>
+      </div>
+      <md-list>
+        <ng-container *ngFor="let item of ratingItems">
+          <md-list-item>
+            <img md-list-avatar src="{{item.avatar}}">
+            <h6 mdLine>{{item.name}}</h6>
+            <p mdLine>{{item.tag}}</p>
+            <div class="val-wrap" fxLayout="row" fxLayoutAlign="space-around center">
+              <md-progress-bar fxFlex="70" [mode]="'determinate'" [value]="item.value"></md-progress-bar>
+              <span fxFlex="30" class="rating-val secondary-text-color text-right">{{item.value}}%</span>
+            </div>
+            <button md-icon-button [mdMenuTriggerFor]="menuAbove">
+              <md-icon class="secondary-text-color">more_vert</md-icon>
+            </button>
+          </md-list-item>
+          <md-divider></md-divider>
+        </ng-container>
+      </md-list>
+    </md-card>
+  </div>
+  <div fxFlex="50" fxLayout="column" fxLayout.gt-sm="row">
+    <div fxFlex="50" fxLayout="column">
+      <md-card class="statistics-card">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div>
+            <h5 class="font-w-light secondary-text-color">Sales</h5>
+          </div>
+          <div>
+            <button md-icon-button [mdMenuTriggerFor]="menuAbove">
+              <md-icon class="secondary-text-color">more_vert</md-icon>
+            </button>
+          </div>
+        </div>
+        <div class="secondary-text-color">1 September, Monday</div>
+        <h4 class="font-w-light text-truncate push-bottom-none">
+          <span>$ 598,258</span>
+          <md-icon>expand_less</md-icon>
+        </h4>
+        <md-card-footer>
+          <div echarts [options]="areaChartWithLineOption" (chartInit)="chartInstances.push($event)"
+               class="area-chart-with-line"></div>
+        </md-card-footer>
+      </md-card>
+      <md-card fxFlex class="clients-card">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div>
+            <button md-fab>
+              <md-icon>add_shopping_cart</md-icon>
+            </button>
+          </div>
+          <div fxFlex class="pad-left-md">
+            <h5 class="push-none wide-spacing">396</h5>
+            <div class="secondary-text-color md-subhead wide-spacing">New Clients</div>
+          </div>
+          <div fxFlexAlign="start">
+            <button md-icon-button [mdMenuTriggerFor]="menuAbove">
+              <md-icon class="secondary-text-color">more_vert</md-icon>
+            </button>
+          </div>
+        </div>
+      </md-card>
+      <md-card fxFlex>
+        <md-list>
+          <md-list-item>
+            <img md-list-avatar src="/assets/avatars-img/4040.png">
+            <h6 mdLine>Peter Walsh</h6>
+            <p mdLine>
+              <span>Ux/UI Designer @MOMO</span>
+            </p>
+            <button md-icon-button [mdMenuTriggerFor]="menuAbove">
+              <md-icon class="secondary-text-color">more_vert</md-icon>
+            </button>
+          </md-list-item>
+        </md-list>
+        <div echarts [options]="doughnutOption" (chartInit)="chartInstances.push($event)" class="doughnut-chart"></div>
+        <div>
+          <div class="values-gb" fxLayout="row">
+            <div fxFlex fxLayout="row" fxLayoutAlign="end center" class="pad-right-xs">
+              <md-icon [color]="'primary'">expand_more</md-icon>
+              <h6 class="font-w-light">58GB</h6>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="pad-left-xs">
+              <md-icon [color]="'accent'">expand_less</md-icon>
+              <h6 class="font-w-light">2GB</h6>
+            </div>
+          </div>
+          <div class="md-caption font-w-light text-center">Lorem ipsum dolor sit amet.</div>
+        </div>
+      </md-card>
+    </div>
+    <div fxFlex="50" fxLayout="column">
+      <md-card fxFlex class="project-card">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div>
+            <h5 class="font-w-light secondary-text-color">Project List</h5>
+          </div>
+          <div>
+            <button md-icon-button [mdMenuTriggerFor]="menuAbove">
+              <md-icon class="secondary-text-color">more_vert</md-icon>
+            </button>
+          </div>
+        </div>
+        <md-list>
+          <md-list-item *ngFor="let item of projectItems">
+            <img md-list-avatar src="{{item.avatar}}">
+            <h6 mdLine>{{item.title}}</h6>
+            <p mdLine>
+              <span>{{item.text}}</span>
+              <span class="primary-color">{{item.project}}</span>
+            </p>
+            <p mdLine class="text-right">
+              {{item.date}}
+            </p>
+          </md-list-item>
+        </md-list>
+      </md-card>
+      <md-card fxFlex class="notebook-card">
+        <md-card-footer class="white-text-color">
+          <h5 class="font-w-light">Robert Hart</h5>
+          <div class="font-w-light">May 15, 2017</div>
+        </md-card-footer>
+      </md-card>
+      <md-card fxFlex class="todo-card">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div>
+            <h5 class="font-w-light white-text-color">Todo List</h5>
+          </div>
+          <div>
+            <button md-icon-button [mdMenuTriggerFor]="menuAbove">
+              <md-icon class="white-text-color">more_vert</md-icon>
+            </button>
+          </div>
+        </div>
+        <md-list class="pad-right-sm">
+          <md-list-item *ngFor="let item of todoItems">
+            <p mdLine class="title">{{item.title}}</p>
+            <p mdLine class="text">{{item.text}}</p>
+            <md-checkbox [(ngModel)]="item.done"></md-checkbox>
+          </md-list-item>
+          <md-divider class="push-top push-bottom"></md-divider>
+          <md-list-item *ngFor="let item of doneItems">
+            <p mdLine class="title"><s>{{item.title}}</s></p>
+            <p mdLine class="text"><s>{{item.text}}</s></p>
+            <md-checkbox [(ngModel)]="item.done"></md-checkbox>
+          </md-list-item>
+          <md-input-container class="push-top-sm">
+            <input mdInput  placeholder="Add new task">
+          </md-input-container>
+        </md-list>
+      </md-card>
+    </div>
+  </div>
+</section>
+<md-menu #menuAbove="mdMenu" xPosition="before" yPosition="below">
+  <button md-menu-item *ngFor="let item of menuItems">
+    {{ item.text }}
+  </button>
+</md-menu>

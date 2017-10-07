@@ -1,0 +1,39 @@
+<section>
+  <header class="text-center">
+    <h5>Pricing Plans</h5>
+    <div class="md-subhead">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium blanditiis dolorum ducimus placeat possimus
+      provident qui reprehenderit tempore totam voluptatibus. At doloribus possimus praesentium quam ut! Deserunt,
+      excepturi tempore? Magnam.
+    </div>
+  </header>
+  <article class="push-top">
+    <div fxLayout="column" fxLayout.gt-md="row">
+      <md-card fxFlex="33" class="pricing-card text-center" *ngFor="let item of prisingItems">
+        <md-card-content>
+          <div class="pricing-icon">
+            <div>
+              <img src="{{item.icon}}">
+            </div>
+          </div>
+          <h6 class="primary-color push-top-xl">{{item.title}}</h6>
+          <div fxLayou="column" fxLayoutAlign="center center">
+            <ul class="text-left feature-list">
+              <li *ngFor="let feature of item.features">
+                <md-icon class="text-xl primary-color-light">check</md-icon>
+                {{feature}}
+              </li>
+            </ul>
+          </div>
+        </md-card-content>
+        <md-card-footer>
+          <div class="md-display-1">{{item.price}}</div>
+          <div class="push-top-md push-bottom-md">
+          <button md-raised-button color="primary" >SUBSCRIBE</button>
+          </div>
+        </md-card-footer>
+      </md-card>
+
+    </div>
+  </article>
+</section>
