@@ -7,31 +7,31 @@
       </button>
       <div fxFlex class="text-center pad-right-xl">
         <a href="/">
-          <img *ngIf="darkTheme; else darkLogo" src="/assets/logo/logo-text-white.png">
+          <img *ngIf="darkTheme; else darkLogo" src="assets/logo/logo-text-white.png">
           <ng-template #darkLogo>
-            <img src="/assets/logo/logo-text-black.png">
+            <img src="assets/logo/logo-text-black.png">
           </ng-template>
         </a>
       </div>
     </header>
     <perfect-scrollbar class="perfect-scrollbar">
       <px-gdn-sidemenu>
-        <px-gdn-sideitem title="Inicio" [routerLinkUrl]="''">
+        <px-gdn-sideitem title="Inicio" [routerLinkUrl]="'/'">
           <md-icon>home</md-icon>
         </px-gdn-sideitem>
-        <px-gdn-sideitem title="Usuarios" [routerLinkUrl]="'usuarios'">
+        <px-gdn-sideitem title="Usuarios" [routerLinkUrl]="'/usuarios'">
             <md-icon>people</md-icon>
         </px-gdn-sideitem>
-        <px-gdn-sideitem title="Propietarios" [routerLinkUrl]="'propietarios'">
+        <px-gdn-sideitem title="Propietarios" [routerLinkUrl]="'/propietarios'">
           <md-icon>recent_actors</md-icon>
         </px-gdn-sideitem>
-        <px-gdn-sideitem title="Inmuebles" [routerLinkUrl]="'imuebles'">
+        <px-gdn-sideitem title="Inmuebles" [routerLinkUrl]="'/inmuebles'">
           <md-icon>location_city</md-icon>
         </px-gdn-sideitem>
-        <px-gdn-sideitem title="Arrendatarios" [routerLinkUrl]="'arrendatarios'">
+        <px-gdn-sideitem title="Arrendatarios" [routerLinkUrl]="'/arrendatarios'">
           <md-icon>hotel</md-icon>
         </px-gdn-sideitem>
-        <px-gdn-sideitem title="Proveedores" [routerLinkUrl]="'proveedores'">
+        <px-gdn-sideitem title="Proveedores" [routerLinkUrl]="'/proveedores'">
           <md-icon>local_shipping</md-icon>
         </px-gdn-sideitem>
       </px-gdn-sidemenu>
@@ -46,7 +46,7 @@
       <md-icon>menu</md-icon>
     </button>
     <a fxHide="true" fxHide.gt-sm="false" href="/" class="logo">
-      <img src="/assets/logo/logo-text-white.png">
+      <img src="assets/logo/logo-text-white.png">
     </a>
     <!--<span fxHide="true" fxHide.gt-sm="false">Application</span>-->
     <span fxFlex></span>

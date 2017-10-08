@@ -169,14 +169,22 @@ export class HomeComponent implements OnInit , OnDestroy {
       },
       {
           id: Math.floor((Math.random() * 1000) + 1),
-          nombre: 'Alan Brito',
+          nombre: 'John Doe',
           fecha: '2017-09-20'
       },
       {
           id: Math.floor((Math.random() * 1000) + 1),
-          nombre: 'Rosa la rasposa',
-          fecha: '2017-09-21'
-      }
+          nombre: 'John Doe',
+          fecha: '2017-09-20'
+      },  {
+            id: Math.floor((Math.random() * 1000) + 1),
+            nombre: 'John Doe',
+            fecha: '2017-09-20'
+        },  {
+              id: Math.floor((Math.random() * 1000) + 1),
+              nombre: 'John Doe',
+              fecha: '2017-09-20'
+          },
   ];
 
   // Items for card with linecharts

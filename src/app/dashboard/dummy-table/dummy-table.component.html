@@ -1,3 +1,42 @@
-<p>
-  dummy-table works!
-</p>
+<h1 class="font-w-light primary-text-color">{{ title }}</h1>
+<br>
+<div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+<span *ngIf="!searchBox.searchVisible" class="push-left-sm">
+  <span class="md-title">{{ title }}</span>
+</span>
+  <span *ngIf="!searchBox.searchVisible" class="push-left-sm">
+</span>
+  <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Buscar {{ title }}..."
+                 (searchDebounce)="search($event)" flex>
+  </td-search-box>
+</div>
+<md-divider></md-divider>
+<td-data-table
+  #dataTable
+  [data]="filteredData"
+  [columns]="columns"
+  [sortable]="true"
+  [sortBy]="id"
+  [sortOrder]="sortOrder"
+  (sortChange)="sort($event)">
+  <ng-template tdDataTableTemplate="actions" let-value="value" let-row="row">
+   <div fxLayout="row" fxLayoutAlign="center center">
+     <button md-mini-fab color="warn" mdTooltip="{{ 'Eliminar' }}">
+       <md-icon>delete</md-icon>
+     </button>
+     <button md-mini-fab color="primary" mdTooltip="{{ 'Editar' }}">
+       <md-icon>edit</md-icon>
+     </button> 
+     <button md-mini-fab mdTooltip="{{ 'Detalles' }}">
+       <md-icon>assignment</md-icon>
+     </button>
+   </div>
+ </ng-template>
+</td-data-table>
+<div class="md-padding" *ngIf="!dataTable.hasData" layout="row" layout-align="center center">
+  <h3>Sin resultados para mostrar</h3>
+</div>
+<td-paging-bar #pagingBar [pageSize]="pageSize" [total]="filteredTotal" (change)="page($event)" class="push-top">
+  <span td-paging-bar-label hide-xs>Filas por página:</span>
+  {{pagingBar.range}} <span hide-xs>de {{pagingBar.total}}</span>
+</td-paging-bar>
