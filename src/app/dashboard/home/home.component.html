@@ -1,7 +1,7 @@
 <h1 class="font-w-light primary-text-color">Bienvenido</h1>
 <br>
 <section fxLayout="column" fxLayout.gt-md="row">
-  <div fxFlex="75" fxLayout="column">
+  <div fxFlex="100" fxLayout="column">
     <md-card fxFlex>
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <div>
@@ -56,20 +56,6 @@
       </div>
        <div echarts [options]="areaChartOption" (chartInit)="chartInstances.push($event)" class="area-chart"></div>
     </md-card>
-  </div>
-  <div fxFlex="25" fxLayout="column" fxLayout.gt-sm="row">
-      <md-card fxFlex class="project-card">
-        <div fxLayout="row" fxLayoutAlign="space-between center">
-          <div>
-            <h5 class="font-w-light secondary-text-color">Acciones rápidas</h5>
-          </div>
-        </div>
-        <md-list>
-          <md-list-item *ngFor="let option of quickActions">
-               <button md-raised-button color="primary" class="full-width">{{ option }}</button>
-          </md-list-item>
-        </md-list>
-      </md-card>
   </div>
 </section>
 <md-menu #menuAbove="mdMenu" xPosition="before" yPosition="below">

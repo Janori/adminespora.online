@@ -1,0 +1,43 @@
+<h1 class="font-w-light primary-text-color">{{ title }}</h1>
+<br>
+<section fxLayout="column" fxLayout.gt-md="row">
+    <div fxFlex="100" fxLayout="column">
+        <md-card fxFlex>
+            <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+                <span class="push-left-sm">
+                  <span class="md-title">{{ title }}</span>
+                </span>
+                <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Buscar {{ title }}..."
+                             (searchDebounce)="search($event)" flex>
+                </td-search-box>
+            </div>
+            <md-divider></md-divider>
+            <td-data-table
+              #dataTable
+              [data]="filteredData"
+              [columns]="columns"
+              [sortable]="true"
+              [sortBy]="id"
+              [sortOrder]="sortOrder"
+              (sortChange)="sort($event)">
+              <ng-template tdDataTableTemplate="actions" let-value="value" let-row="row">
+               <div fxLayout="row" fxLayoutAlign="right right">
+                    <button md-icon-button color="primary" mdTooltip="Editar" (click)="editBuilding(row)">
+                        <md-icon>edit</md-icon>
+                    </button>
+                    <button md-icon-button color="warn" mdTooltip="Eliminar" (click)="deleteBuilding(row)">
+                        <md-icon>delete</md-icon>
+                    </button>
+               </div>
+             </ng-template>
+            </td-data-table>
+            <div class="md-padding" *ngIf="!dataTable.hasData" layout="row" layout-align="center center">
+              <h3>Sin resultados para mostrar</h3>
+            </div>
+            <td-paging-bar #pagingBar [pageSize]="pageSize" [total]="filteredTotal" (change)="page($event)" class="push-top">
+              <span td-paging-bar-label hide-xs>Filas por página:</span>
+              {{pagingBar.range}} <span hide-xs>de {{pagingBar.total}}</span>
+            </td-paging-bar>
+        </md-card>
+    </div>
+</section>

@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 .full-width {
-    width: 100%;
+    width: 100% !important;
 }
 
 .table {
@@ -30,4 +30,14 @@
 
 .pull-left {
     float: left;
+}
+
+.quick-button {
+    width: 100%;
+    p {
+        text-align: left;
+        button {
+            float: right;
+        }
+    }
 }

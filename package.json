@@ -32,6 +32,7 @@
     "@ngx-translate/http-loader": "^1.0.2",
     "@types/node": "^6.0.66",
     "angular-tree-component": "^5.0.0",
+    "angular-ui-carousel": "^0.1.10",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.4.1",
     "echarts": "^3.5.2",

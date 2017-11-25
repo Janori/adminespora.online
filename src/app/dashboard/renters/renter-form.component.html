@@ -1,0 +1,25 @@
+<h4 md-dialog-title>Detalles de Arrendador - {{ data.renter.full_name }}</h4>
+<div md-dialog-content>
+    <md-input-container class="full-width">
+      <input mdInput placeholder="Nombre" [(ngModel)]="data.renter.name">
+    </md-input-container>
+    <md-input-container class="full-width">
+      <input mdInput placeholder="Apellido Paterno" [(ngModel)]="data.renter.first_surname">
+    </md-input-container>
+    <md-input-container class="full-width">
+      <input mdInput placeholder="Apellido Materno" [(ngModel)]="data.renter.last_surname">
+    </md-input-container>
+    <md-input-container class="full-width">
+      <input mdInput placeholder="Dirección" [(ngModel)]="data.renter.address">
+    </md-input-container>
+    <md-input-container class="full-width">
+      <input mdInput placeholder="Teléfono" [(ngModel)]="data.renter.phone">
+    </md-input-container>
+    <md-input-container class="full-width">
+      <input mdInput placeholder="Celular" [(ngModel)]="data.renter.cellphone">
+    </md-input-container>
+</div>
+<div md-dialog-actions class="dialog-example-buttons">
+  <button md-button (click)="dialogRef.close(false)" color="warn">Cancelar</button>
+  <button md-button (click)="dialogRef.close(data.renter)" color="primary">Aceptar</button>
+</div>

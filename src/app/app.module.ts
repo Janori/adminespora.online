@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { routing, appRoutingProviders} from './app.routing';
+import { AuthGuard } from './shared/security/auth.guard';
 
 import {PerfectScrollbarConfigInterface, PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -65,13 +66,42 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './dashboard/home/home.component';
 import { DummyTableComponent } from './dashboard/dummy-table/dummy-table.component';
+import { UsersComponent } from './dashboard/users/users.component';
+import { UserFormComponent } from './dashboard/users/user-form.component';
+import { OwnersComponent } from './dashboard/owners/owners.component';
+import { OwnerFormComponent } from './dashboard/owners/owner-form.component';
+import { RentersComponent } from './dashboard/renters/renters.component';
+import { RenterFormComponent } from './dashboard/renters/renter-form.component';
+import { ProvidersComponent } from './dashboard/providers/providers.component';
+import { ProviderFormComponent } from './dashboard/providers/provider-form.component';
+import { BuildingsComponent } from './dashboard/buildings/buildings.component';
+import { BuildingFormComponent } from './dashboard/buildings/building-form.component';
+import { LoginComponent } from './dashboard/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     HomeComponent,
-    DummyTableComponent
+    DummyTableComponent,
+    UsersComponent,
+    UserFormComponent,
+    OwnersComponent,
+    OwnerFormComponent,
+    RentersComponent,
+    RenterFormComponent,
+    ProvidersComponent,
+    ProviderFormComponent,
+    BuildingsComponent,
+    BuildingFormComponent,
+    LoginComponent
+  ],
+  entryComponents: [
+      UserFormComponent,
+      OwnerFormComponent,
+      RenterFormComponent,
+      ProviderFormComponent,
+      BuildingFormComponent
   ],
   imports: [
     BrowserModule,
@@ -131,7 +161,8 @@ import { DummyTableComponent } from './dashboard/dummy-table/dummy-table.compone
   ],
   providers: [
        { provide: LOCALE_ID, useValue: 'es-MX' },
-      appRoutingProviders
+      appRoutingProviders,
+      AuthGuard
   ],
   bootstrap: [AppComponent]
 })

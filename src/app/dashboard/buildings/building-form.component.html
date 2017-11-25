@@ -1,0 +1,64 @@
+<h4 md-dialog-title>Detalles de Inmueble #{{ data.building.id }}</h4>
+<div md-dialog-content>
+    <md-tab-group dynamicHeight>
+      <md-tab>
+        <ng-template mdTabLabel>Información</ng-template>
+        <br>
+        <md-checkbox [(ngModel)]="data.building.is_new">¿Es nuevo?</md-checkbox>
+        <br>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Dirección" [(ngModel)]="data.building.address">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Precio de renta" [(ngModel)]="data.building.rent_price" type="number">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="% Comision" min="1" max="100" [(ngModel)]="data.building.comision" type="number">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Plazo mínimo" [(ngModel)]="data.building.plazo_minimo" type="number">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="No. depositos" [(ngModel)]="data.building.no_depositos" type="number">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Costo de mantenimiento ($)" [(ngModel)]="data.building.costo_mto" type="number">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Habitaciones" [(ngModel)]="data.building.habitaciones" type="number">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Baños" [(ngModel)]="data.building.banos" type="number">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Estacionamientos" [(ngModel)]="data.building.estacionamientos" type="number">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Patios" [(ngModel)]="data.building.patios" type="number">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Terreno (m2)" [(ngModel)]="data.building.terreno" type="number">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Terreno de construccion (m2)" [(ngModel)]="data.building.construccion" type="number">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Año de construccion" [(ngModel)]="data.building.ano_contruccion" type="number">
+        </md-input-container>
+        <md-input-container class="full-width">
+            <input mdInput placeholder="Costo del predial ($)" [(ngModel)]="data.building.predial" type="number">
+        </md-input-container>
+      </md-tab>
+      <md-tab disabled="true" mdTooltip="No disponible">
+        <ng-template mdTabLabel>Mantenimiento</ng-template>
+      </md-tab>
+      <md-tab disabled="true" mdTooltip="No disponible">
+          <ng-template mdTabLabel>Rentas</ng-template>
+      </md-tab>
+    </md-tab-group>
+
+</div>
+<div md-dialog-actions class="dialog-example-buttons">
+  <button md-button (click)="dialogRef.close(false)" color="warn">Cancelar</button>
+  <button md-button (click)="dialogRef.close(data.user)" color="primary">Aceptar</button>
+</div>

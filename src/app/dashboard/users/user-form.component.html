@@ -1,0 +1,13 @@
+<h4 md-dialog-title>Detalles de Usuario - {{ data.user.full_name }}</h4>
+<div md-dialog-content>
+    <md-input-container class="full-width">
+      <input mdInput placeholder="Usuario" [(ngModel)]="data.user.username">
+    </md-input-container>
+    <md-input-container class="full-width">
+      <input mdInput placeholder="Contraseña" [(ngModel)]="data.user.password" type="password">
+    </md-input-container>
+</div>
+<div md-dialog-actions class="dialog-example-buttons">
+  <button md-button (click)="dialogRef.close(false)" color="warn">Cancelar</button>
+  <button md-button (click)="dialogRef.close(data.user)" color="primary">Aceptar</button>
+</div>

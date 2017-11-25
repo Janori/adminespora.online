@@ -1,6 +1,7 @@
 import { Component, HostBinding, OnInit, AfterViewInit } from '@angular/core';
 import { ResizeService } from '../resize/resize.service';
 import { routerAnimation } from '../utils/page.animation';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,8 +23,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     kind: 'Administrador',
   };
 
+  public quickActions = [
+    'Crear Usuario',
+    'Crear Propietario',
+    'Crear Inmueble',
+    'Crear Arrendatario'
+  ];
 
-  constructor(public resizeService: ResizeService) {
+
+  constructor(
+      private _router: Router,
+      public resizeService: ResizeService) {
   }
 
   ngOnInit() {
@@ -49,6 +59,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   get boxedLayout() {
     return this._boxedLayout;
+  }
+
+  doLogout = () => {
+      localStorage.setItem('isLogged', 'false');
+      this._router.navigate(['login']);
+  }
+
+  clickHandler = () => {
+      alert('No disponible - Error en el servidor');
   }
 
 }
