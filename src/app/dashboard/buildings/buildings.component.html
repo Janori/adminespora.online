@@ -22,9 +22,9 @@
               (sortChange)="sort($event)">
               <ng-template tdDataTableTemplate="actions" let-value="value" let-row="row">
                <div fxLayout="row" fxLayoutAlign="right right">
-                    <button md-icon-button color="primary" mdTooltip="Editar" (click)="editBuilding(row)">
-                        <md-icon>edit</md-icon>
-                    </button>
+                   <a md-icon-button color="accent" mdTooltip="Ver ficha técnica" [routerLink]="row.id">
+                       <md-icon>class</md-icon>
+                   </a>
                     <button md-icon-button color="warn" mdTooltip="Eliminar" (click)="deleteBuilding(row)">
                         <md-icon>delete</md-icon>
                     </button>

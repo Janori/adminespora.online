@@ -10,6 +10,7 @@ import { OwnersComponent } from './dashboard/owners/owners.component';
 import { RentersComponent } from './dashboard/renters/renters.component';
 import { ProvidersComponent } from './dashboard/providers/providers.component';
 import { BuildingsComponent } from './dashboard/buildings/buildings.component';
+import { BuildingDetailComponent } from './dashboard/buildings/building-detail.component';
 import { LoginComponent } from './dashboard/login/login.component';
 
 const appRoutes : Routes = [
@@ -21,7 +22,13 @@ const appRoutes : Routes = [
             { path: '', component: HomeComponent },
             { path: 'usuarios', component: UsersComponent },
             { path: 'propietarios', component: OwnersComponent },
-            { path: 'inmuebles', component: BuildingsComponent },
+            {
+                path: 'inmuebles',
+                children: [
+                    { path: '', component: BuildingsComponent },
+                    { path: ':id', component: BuildingDetailComponent },
+                ]
+            },
             { path: 'arrendatarios', component: RentersComponent },
             { path: 'proveedores', component: ProvidersComponent },
         ],

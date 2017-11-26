@@ -62,6 +62,8 @@ export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
+import { OwlModule } from 'ngx-owl-carousel';
+
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './dashboard/home/home.component';
@@ -76,6 +78,7 @@ import { ProvidersComponent } from './dashboard/providers/providers.component';
 import { ProviderFormComponent } from './dashboard/providers/provider-form.component';
 import { BuildingsComponent } from './dashboard/buildings/buildings.component';
 import { BuildingFormComponent } from './dashboard/buildings/building-form.component';
+import { BuildingDetailComponent } from './dashboard/buildings/building-detail.component';
 import { LoginComponent } from './dashboard/login/login.component';
 
 @NgModule({
@@ -94,7 +97,8 @@ import { LoginComponent } from './dashboard/login/login.component';
     ProviderFormComponent,
     BuildingsComponent,
     BuildingFormComponent,
-    LoginComponent
+    LoginComponent,
+    BuildingDetailComponent
   ],
   entryComponents: [
       UserFormComponent,
@@ -157,6 +161,7 @@ import { LoginComponent } from './dashboard/login/login.component';
       deps: [HttpClient]
     }
     }),
+    OwlModule,
     routing
   ],
   providers: [

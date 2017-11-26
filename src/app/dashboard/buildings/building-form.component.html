@@ -4,6 +4,13 @@
       <md-tab>
         <ng-template mdTabLabel>Información</ng-template>
         <br>
+        <owl-carousel #owlElement
+        [options]="{items: 3, dots: false, navigation: false}"
+        [carouselClasses]="['owl-theme', 'row', 'sliding']">
+        <div class="item" *ngFor="let image of images;let i = index">
+            <div class="thumbnail-image" [style.background]="getBackground(image)"></div>
+        </div>
+        </owl-carousel>
         <md-checkbox [(ngModel)]="data.building.is_new">¿Es nuevo?</md-checkbox>
         <br>
         <md-input-container class="full-width">
@@ -49,10 +56,10 @@
             <input mdInput placeholder="Costo del predial ($)" [(ngModel)]="data.building.predial" type="number">
         </md-input-container>
       </md-tab>
-      <md-tab disabled="true" mdTooltip="No disponible">
+      <md-tab>
         <ng-template mdTabLabel>Mantenimiento</ng-template>
       </md-tab>
-      <md-tab disabled="true" mdTooltip="No disponible">
+      <md-tab>
           <ng-template mdTabLabel>Rentas</ng-template>
       </md-tab>
     </md-tab-group>

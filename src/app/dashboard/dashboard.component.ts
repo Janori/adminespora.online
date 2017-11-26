@@ -24,10 +24,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   };
 
   public quickActions = [
-    'Crear Usuario',
-    'Crear Propietario',
-    'Crear Inmueble',
-    'Crear Arrendatario'
+    {text: 'Crear Usuario', icon: 'people'},
+    {text: 'Crear Propietario', icon: 'recent_actors'},
+    {text: 'Crear Inmueble', icon: 'location_city'},
+    {text: 'Crear Arrendatario', icon: 'hotel'},
+    {text: 'Crear Proveedor', icon: 'local_shipping'},
   ];
 
 

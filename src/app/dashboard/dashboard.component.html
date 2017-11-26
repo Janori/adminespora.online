@@ -91,9 +91,9 @@
     </md-toolbar>
     <button md-raised-button class="quick-button" *ngFor="let action of quickActions" (click)="clickHandler()" color="primary">
         <p class="quick-text">
-            {{ action }}
+            {{ action.text }}
             <button md-mini-fab color="default">
-              <md-icon>play_arrow</md-icon>
+              <md-icon>{{ action.icon }}</md-icon>
             </button>
         </p>
     </button>
