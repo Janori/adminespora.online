@@ -1,12 +1,13 @@
-import { Component, NgZone, OnDestroy, OnInit} from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { StepState, TdMediaService } from '@covalent/core';
-import { Building } from '../../shared/models';
-import {Subscription} from 'rxjs/Subscription';
+import { Building, Renter, Rent } from '../../shared/models';
+import { Subscription } from 'rxjs/Subscription';
 import { MdDialog, MdSnackBar } from '@angular/material';
 import { BuildingFormComponent } from './building-form.component';
 import { BuildingRentComponent } from './building-rent.component';
 import { ConfirmDialogComponent } from '../../shared/components';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-building-detail',
@@ -17,6 +18,21 @@ export class BuildingDetailComponent implements OnInit {
     public building: Building;
     public isScreenGtSm: boolean = false;
     public querySubscription: Subscription;
+    public renters: Renter[];
+    public renterCtrl: FormControl;
+    public filteredRenters: any;
+
+    public stateStep1: StepState = StepState.Required;
+    public stateStep2: StepState = StepState.None;
+    public stateStep3: StepState = StepState.None;
+
+    public disabledStep1: boolean = true;
+    public disabledStep2: boolean = true;
+    public disabledStep3: boolean = true;
+
+    public activeStep1: boolean = true;
+    public activeStep2: boolean = false;
+    public activeStep3: boolean = false;
 
     constructor(
         private _router: Router,
@@ -106,18 +122,41 @@ export class BuildingDetailComponent implements OnInit {
     }
 
     rentBuilding = (building?: Building) => {
-        const dialogRef = this._mdDialog.open(BuildingRentComponent, {
-            width: '700px',
-            data: {
-                building: building,
-            }
+        this.building.rent = new Rent({
+            // owner: this.data.building.owner,
+            owner_id: this.building.owner_id,
+            precio_minimo: this.building.rent_price,
         });
-        dialogRef.afterClosed().subscribe(result => {
-            if(typeof result != undefined) {
-                if(result !== false) {
-                    this._mdSnackbar.open('¿Apoco sí carnal?', 'Aceptar');
-                }
-            }
-        });
+        this.getRenters();
+    }
+
+    getRenters = () => {
+        this.renters = [
+            new Renter({
+                id: Math.floor((Math.random() * 1000) + 1),
+                name: 'Alejandro',
+                first_surname: 'Gori',
+                address: 'Calle real #' + Math.floor((Math.random() * 1000) + 1),
+                phone: '333' + Math.floor((Math.random() * 1000) + 1) +  '082',
+            })
+        ];
+
+        this.renterCtrl = new FormControl();
+        this.filteredRenters = this.renterCtrl.valueChanges
+          .startWith(null)
+          .map(name => this.filterRenters(name));
+    }
+
+    filterRenters = (val: string) => val ? this.renters.filter((r) => new RegExp(val, 'gi').test(r.full_name)) : this.renters;
+
+    contractGenerate = () => {
+        this.building.rent.document_url = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+        this.stateStep1 = StepState.Complete;
+        this.stateStep2 = StepState.Complete;
+        this.disabledStep2 = false;
+        this.disabledStep3 = false;
+
+        this.activeStep1 = false;
+        this.activeStep2 = true;
     }
 }

@@ -1,4 +1,4 @@
-import { Owner } from './';
+import { Owner, Rent } from './';
 
 export class Building {
     public id: number;
@@ -18,7 +18,7 @@ export class Building {
     public construccion: number;
     public ano_contruccion: number;
     public predial: number;
-    public rents: any = [];
+    public rent: Rent = null;
     public owner_id: number;
     public owner: Owner;
 
@@ -46,9 +46,9 @@ export class Building {
     }
 
     get rent_status(): number {
-        if(this.rents.length == 0)
+        if(this.rent == null)
             return 1;
-        else if(this.rents.length == 1)
+        else if(this.rent.id == null)
             return 2;
         else
             return 3;

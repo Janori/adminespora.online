@@ -6,7 +6,7 @@
                     <md-card-title class="building-title">
                         Inmueble #{{ building.id }}
                         <div class="building-actions">
-                            <button md-raised-button color="accent" (click)="rentBuilding(building)">Rentar</button>
+                            <button md-raised-button color="accent" (click)="rentBuilding(building)" *ngIf="building.rent_status == 1">Rentar</button>
                             <button md-raised-button color="primary" (click)="editBuilding(building)">Editar</button>
                             <button md-raised-button color="warn" (click)="deleteBuilding(building)">Eliminar</button>
                         </div>
@@ -15,23 +15,79 @@
             </div>
         </div>
         <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap>
-            <div fxFlex="100" fxFlex.gt-sm="70" fxFlex.gt-md="70">
+            <div fxFlex="100">
                 <md-card>
                     <md-card-title>Ficha técnica del inmueble</md-card-title>
+                        <owl-carousel
+                         [options]="{items: 3, dots: true, navigation: true}"
+                         [carouselClasses]="['owl-theme', 'row', 'sliding']">
+                             <div class="item">
+                                 <div class="thumbnail-image" style="background: url('assets/photo-1462396240927-52058a6a84ec.jpg') no-repeat scroll center center / 600px 600px"></div>
+                             </div>
+                             <div class="item">
+                                 <div class="thumbnail-image" style="background: url('assets/photo-1462396240927-52058a6a84ec.jpg') no-repeat scroll center center / 600px 600px"></div>
+                             </div>
+                             <div class="item">
+                                 <div class="thumbnail-image" style="background: url('assets/photo-1462396240927-52058a6a84ec.jpg') no-repeat scroll center center / 600px 600px"></div>
+                             </div>
+                        </owl-carousel>
                 </md-card>
             </div>
-            <div fxFlex="100" fxFlex.gt-sm="30" fxFlex.gt-md="30">
+        </div>
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap *ngIf="building.rent_status == 2">
+            <div fxFlex="100">
                 <md-card>
-                        <md-card-title>Manteniminetos</md-card-title>
+                    <md-card-title>Trámite de arrendamiento</md-card-title>
+                    <td-steps #stepper [mode]="isScreenGtSm ? 'horizontal' : 'vertical'">
+                        <td-step #step1 label="Información de contrato" sublabel="Captura de datos" [state]="stateStep1" [active]="activeStep1">
+                            <md-input-container class="full-width">
+                                <input mdInput placeholder="Arrendador" [mdAutocomplete]="auto" [formControl]="renterCtrl" [(ngModel)]="building.rent.renter_id">
+                            </md-input-container>
+                            <md-autocomplete #auto="mdAutocomplete">
+                                <md-option *ngFor="let renter of filteredRenters | async" [value]="renter.id">
+                                {{ renter.full_name }}
+                                </md-option>
+                            </md-autocomplete>
+                            <md-input-container class="full-width">
+                                <input mdInput type="number" placeholder="Plazo de renta (meses)" [(ngModel)]="building.rent.plazo_minimo">
+                            </md-input-container>
+                            <md-input-container class="full-width">
+                                <input mdInput type="number" placeholder="Precio de renta ($)" [(ngModel)]="building.rent.precio_renta">
+                            </md-input-container>
+                            <md-input-container class="full-width">
+                                <input mdInput type="date" placeholder="Fecha de inicio" [(ngModel)]="building.rent.fecha_inicio">
+                            </md-input-container>
+                            <ng-template td-step-actions>
+                                <div>
+                                    <button md-raised-button color="primary" (click)="contractGenerate()" class="text-upper">Guardar formulario</button>
+                                </div>
+                            </ng-template>
+                        </td-step>
+                        <td-step #step2 label="Contrato de arrendamiento" sublabel="Consulta de PDF" [state]="stateStep2" [disabled]="disabledStep2" [active]="activeStep2">
+                            <ng-template td-step-actions>
+                              <div>
+                                <a md-raised-button [href]="building.rent.document_url" target="_blank" color="primary" class="text-upper">Ver documento generado</a>
+                              </div>
+                            </ng-template>
+                        </td-step>
+                        <td-step #step3 label="Cierre de trámite" sublabel="Carga de contrato firmado" [state]="stateStep3" [disabled]="disabledStep3" [active]="activeStep3">
+                        </td-step>
+                    </td-steps>
+                </md-card>
+            </div>
+        </div>
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap *ngIf="building.rent_status == 3">
+            <div fxFlex="100">
+                <md-card>
+                    <md-card-title>Rentas</md-card-title>
+
                 </md-card>
             </div>
         </div>
         <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap>
             <div fxFlex="100">
                 <md-card>
-                    <md-card-title>Rentas</md-card-title>
-
-
+                    <md-card-title>Manteniminetos</md-card-title>
                 </md-card>
             </div>
         </div>
