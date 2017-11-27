@@ -1,0 +1,24 @@
+<h4 md-dialog-title>Renta del inmueble #{{ data.building.id }}</h4>
+<div md-dialog-content>
+    <md-input-container class="full-width">
+        <input mdInput placeholder="Arrendador" [mdAutocomplete]="auto" [formControl]="renterCtrl" [(ngModel)]="rent.renter_id">
+    </md-input-container>
+    <md-autocomplete #auto="mdAutocomplete">
+        <md-option *ngFor="let renter of filteredRenters | async" [value]="renter.id">
+            {{ renter.full_name }}
+        </md-option>
+    </md-autocomplete>
+    <md-input-container class="full-width">
+        <input mdInput type="number" placeholder="Plazo de renta (meses)" [(ngModel)]="rent.plazo_minimo">
+    </md-input-container>
+    <md-input-container class="full-width">
+        <input mdInput type="number" placeholder="Precio de renta ($)" [(ngModel)]="rent.precio_renta">
+    </md-input-container>
+    <md-input-container class="full-width">
+        <input mdInput type="date" placeholder="Fecha de inicio" [(ngModel)]="rent.fecha_inicio">
+    </md-input-container>
+</div>
+<div md-dialog-actions class="dialog-buttons">
+    <button md-button (click)="dialogRef.close(false)" color="warn">Cancelar</button>
+    <button md-button (click)="dialogRef.close(renter)" color="primary">Aceptar</button>
+</div>

@@ -1,40 +1,39 @@
 <section class="building-section">
-  <article>
-    <div fxLayout="row">
-      <div fxFlex="100">
-        <md-card>
-          <md-card-title class="building-title">
-              Inmueble #{{ building.id }}
-              <div class="building-actions">
-                  <button md-raised-button color="primary" (click)="editBuilding(building)">Editar propiedad</button>
-                  <button md-raised-button color="warn">Eliminar propiedad</button>
-              </div>
-          </md-card-title>
-        </md-card>
-      </div>
-    </div>
-    <div fxLayout="row">
-      <div fxFlex="70">
-        <md-card>
-          <md-card-title>Información general</md-card-title>
-          <md-card-content>
-            <div class="h3 font-w-thin-im">Lorem ipsum. Thin</div>
-            <div class="h3 font-w-light-im">Lorem ipsum. Light</div>
-            <div class="h3 font-w-regular-im">Lorem ipsum. Regular</div>
-            <div class="h3 font-w-medium-im">Lorem ipsum. Medium</div>
-            <div class="h3 font-w-bold-im">Lorem ipsum. Bold</div>
-            <div class="h3 font-w-black-im">Lorem ipsum. Black</div>
-          </md-card-content>
-        </md-card>
-      </div>
-      <div fxFlex="30">
-        <md-card>
-          <md-card-title>Aquí iba algo</md-card-title>
-          <md-card-content>
-                que no me acuerdo xd
-          </md-card-content>
-        </md-card>
-      </div>
-    </div>
-  </article>
+    <article>
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap>
+            <div fxFlex="100">
+                <md-card>
+                    <md-card-title class="building-title">
+                        Inmueble #{{ building.id }}
+                        <div class="building-actions">
+                            <button md-raised-button color="accent" (click)="rentBuilding(building)">Rentar</button>
+                            <button md-raised-button color="primary" (click)="editBuilding(building)">Editar</button>
+                            <button md-raised-button color="warn" (click)="deleteBuilding(building)">Eliminar</button>
+                        </div>
+                    </md-card-title>
+                </md-card>
+            </div>
+        </div>
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap>
+            <div fxFlex="100" fxFlex.gt-sm="70" fxFlex.gt-md="70">
+                <md-card>
+                    <md-card-title>Ficha técnica del inmueble</md-card-title>
+                </md-card>
+            </div>
+            <div fxFlex="100" fxFlex.gt-sm="30" fxFlex.gt-md="30">
+                <md-card>
+                        <md-card-title>Manteniminetos</md-card-title>
+                </md-card>
+            </div>
+        </div>
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap>
+            <div fxFlex="100">
+                <md-card>
+                    <md-card-title>Rentas</md-card-title>
+
+
+                </md-card>
+            </div>
+        </div>
+    </article>
 </section>

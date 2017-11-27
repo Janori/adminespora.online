@@ -1,9 +1,18 @@
 .building-section {
     .building-title {
         padding: 0 !important;
+
+        @media screen and (max-width: 480px) {
+            text-align: center;
+        }
         .building-actions {
             float: right;
             margin-top: -.75%;
+
+            @media screen and (max-width: 480px) {
+                float: none;
+                padding-top: 15px;
+            }
         }
     }
 }

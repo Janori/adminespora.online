@@ -1,3 +1,5 @@
+import { Owner } from './';
+
 export class Building {
     public id: number;
     public is_new: number;
@@ -16,6 +18,9 @@ export class Building {
     public construccion: number;
     public ano_contruccion: number;
     public predial: number;
+    public rents: any = [];
+    public owner_id: number;
+    public owner: Owner;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
@@ -35,5 +40,17 @@ export class Building {
         this.construccion = obj && obj.construccion || null;
         this.ano_contruccion = obj && obj.ano_contruccion || null;
         this.predial = obj && obj.predial || null;
+        this.owner_id = obj && obj.owner_id || null;
+
+        this.owner = obj && 'owner' in obj ? new Owner(obj.owner) : null;
+    }
+
+    get rent_status(): number {
+        if(this.rents.length == 0)
+            return 1;
+        else if(this.rents.length == 1)
+            return 2;
+        else
+            return 3;
     }
 }

@@ -41,6 +41,23 @@
       <p>Developed by IT Networks 2017 © All Rights Reserved</p>
     </footer>
   </md-sidenav>
+  <md-sidenav #optionsnav mode="over" align="end">
+      <md-toolbar color="primary">
+          <h5>Acciones rápidas</h5>
+          <span fxFlex></span>
+          <button md-icon-button (click)="optionsnav.close()">
+              <md-icon>close</md-icon>
+          </button>
+      </md-toolbar>
+      <button md-raised-button class="quick-button" *ngFor="let action of quickActions" (click)="clickHandler()" color="primary">
+          <p class="quick-text">
+              {{ action.text }}
+              <button md-mini-fab color="default">
+                  <md-icon>{{ action.icon }}</md-icon>
+              </button>
+          </p>
+      </button>
+  </md-sidenav>
   <md-toolbar color="primary">
     <button md-icon-button (click)="sidenav.toggle()">
       <md-icon>menu</md-icon>
@@ -81,20 +98,3 @@
     <router-outlet></router-outlet>
   </div>
 </md-sidenav-container>
-<md-sidenav #optionsnav mode="over" align="end">
-    <md-toolbar color="primary">
-        <h5>Acciones rápidas</h5>
-        <span fxFlex></span>
-        <button md-icon-button (click)="optionsnav.close()">
-            <md-icon>close</md-icon>
-        </button>
-    </md-toolbar>
-    <button md-raised-button class="quick-button" *ngFor="let action of quickActions" (click)="clickHandler()" color="primary">
-        <p class="quick-text">
-            {{ action.text }}
-            <button md-mini-fab color="default">
-              <md-icon>{{ action.icon }}</md-icon>
-            </button>
-        </p>
-    </button>
-</md-sidenav>

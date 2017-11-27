@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { routing, appRoutingProviders} from './app.routing';
+import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 import { AuthGuard } from './shared/security/auth.guard';
 
 import {PerfectScrollbarConfigInterface, PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
@@ -65,6 +66,7 @@ export function createTranslateLoader(http: HttpClient) {
 import { OwlModule } from 'ngx-owl-carousel';
 
 import { AppComponent } from './app.component';
+import { LoginComponent } from './dashboard/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './dashboard/home/home.component';
 import { DummyTableComponent } from './dashboard/dummy-table/dummy-table.component';
@@ -79,7 +81,7 @@ import { ProviderFormComponent } from './dashboard/providers/provider-form.compo
 import { BuildingsComponent } from './dashboard/buildings/buildings.component';
 import { BuildingFormComponent } from './dashboard/buildings/building-form.component';
 import { BuildingDetailComponent } from './dashboard/buildings/building-detail.component';
-import { LoginComponent } from './dashboard/login/login.component';
+import { BuildingRentComponent } from './dashboard/buildings/building-rent.component';
 
 @NgModule({
   declarations: [
@@ -98,14 +100,18 @@ import { LoginComponent } from './dashboard/login/login.component';
     BuildingsComponent,
     BuildingFormComponent,
     LoginComponent,
-    BuildingDetailComponent
+    BuildingDetailComponent,
+    ConfirmDialogComponent,
+    BuildingRentComponent
   ],
   entryComponents: [
+      ConfirmDialogComponent,
       UserFormComponent,
       OwnerFormComponent,
       RenterFormComponent,
       ProviderFormComponent,
-      BuildingFormComponent
+      BuildingFormComponent,
+      BuildingRentComponent
   ],
   imports: [
     BrowserModule,
