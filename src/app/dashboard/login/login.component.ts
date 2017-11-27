@@ -13,6 +13,9 @@ export class LoginComponent implements OnInit {
   @HostBinding('@routerAnimation') routerAnimation = true;
   constructor(private router: Router) { }
 
+  isLogging = false;
+  error = false;
+
   ngOnInit() {
   }
 
@@ -22,12 +25,17 @@ export class LoginComponent implements OnInit {
    * @param password
    */
   login (login, password) {
+      this.isLogging = true;
+      this.error = false;
+
       if(login != 'admin' || password != 'R3515t0l') {
-          alert('Las credenciales no coinciden');
+          this.isLogging = false;
+          this.error = true;
           return;
       }
+      this.isLogging = false;
 
-      localStorage.setItem('isLogged', 'true');
-      this.router.navigateByUrl('/');
+      //localStorage.setItem('isLogged', 'true');
+      //this.router.navigateByUrl('/');
   }
 }
