@@ -34,6 +34,8 @@ export class BuildingDetailComponent implements OnInit {
     public activeStep2: boolean = false;
     public activeStep3: boolean = false;
 
+    public files: any;
+
     constructor(
         private _router: Router,
         private _route: ActivatedRoute,
@@ -158,5 +160,20 @@ export class BuildingDetailComponent implements OnInit {
 
         this.activeStep1 = false;
         this.activeStep2 = true;
+    }
+
+    uploadFiles = () => {
+        let title = `El contrato de arrendamiento será completado`;
+        let msg = '¿Estás seguro que el archivo de contrato es correcto?'
+        const dialogRef = this._mdDialog.open(ConfirmDialogComponent, {
+            data: {
+                title: title,
+                msg: msg,
+            }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if(result)
+                this.building.rent.id = 1;
+        });
     }
 }

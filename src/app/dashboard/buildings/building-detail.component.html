@@ -18,7 +18,7 @@
             <div fxFlex="100">
                 <md-card>
                     <md-card-title>Ficha técnica del inmueble</md-card-title>
-                        <owl-carousel
+                        <!-- <owl-carousel
                          [options]="{items: 3, dots: true, navigation: true}"
                          [carouselClasses]="['owl-theme', 'row', 'sliding']">
                              <div class="item">
@@ -30,7 +30,7 @@
                              <div class="item">
                                  <div class="thumbnail-image" style="background: url('assets/photo-1462396240927-52058a6a84ec.jpg') no-repeat scroll center center / 600px 600px"></div>
                              </div>
-                        </owl-carousel>
+                        </owl-carousel> -->
                 </md-card>
             </div>
         </div>
@@ -71,6 +71,28 @@
                             </ng-template>
                         </td-step>
                         <td-step #step3 label="Cierre de trámite" sublabel="Carga de contrato firmado" [state]="stateStep3" [disabled]="disabledStep3" [active]="activeStep3">
+                            <div fxLayout="row">
+                                <md-input-container tdFileDrop
+                                (click)="fileInput.inputElement.click()"
+                                (keyup.enter)="fileInput.inputElement.click()"
+                                (keyup.delete)="fileInput.clear()"
+                                (keyup.backspace)="fileInput.clear()" fxFlex>
+                                <input mdInput
+                                    placeholder="Selecciona o suelta archivos"
+                                    [value]="files?.length ? (files?.length + ' files') : files?.name"
+                                    readonly/>
+                                </md-input-container>
+                                <button md-icon-button *ngIf="files" (click)="fileInput.clear()" (keyup.enter)="fileInput.clear()">
+                                    <md-icon class="icon-color">cancel</md-icon>
+                                </button>
+                                <td-file-input class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" multiple>
+                                    <md-icon>folder</md-icon>
+                                    <span class="text-upper">Buscar...</span>
+                                </td-file-input>
+                                <span>
+                                    <button md-raised-button color="accent" [disabled]="!files" class="text-upper" (click)="uploadFiles()">Enviar</button>
+                                </span>
+                            </div>
                         </td-step>
                     </td-steps>
                 </md-card>
