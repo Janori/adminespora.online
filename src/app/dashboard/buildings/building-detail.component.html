@@ -101,7 +101,7 @@
         <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap *ngIf="building.rent_status == 3">
             <div fxFlex="100">
                 <md-card>
-                    <md-card-title>Rentas</md-card-title>
+                    <md-card-title class="building-titile">Rentas</md-card-title>
 
                 </md-card>
             </div>
@@ -109,7 +109,49 @@
         <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap>
             <div fxFlex="100">
                 <md-card>
-                    <md-card-title>Manteniminetos</md-card-title>
+                    <md-card-title class="building-title">
+                        Manteniminetos
+                        <div class="building-actions">
+                            <button md-raised-button color="primary" (click)="addTicket()">Crear mantenimiento</button>
+                        </div>
+                    </md-card-title>
+                    <md-tab-group class="tab-group" dynamicHeight [(selectedIndex)]="activeTabIndex">
+                        <md-tab *ngFor="let tab of dynamicTabs">
+                            <ng-template mdTabLabel>{{ tab.label }}</ng-template>
+                            <td-steps [mode]="isScreenGtSm ? 'horizontal' : 'vertical'">
+                                <td-step label="Datos del solicitante" sublabel="Identificación del solicitante" active="1">
+                                    <md-input-container class="full-width">
+                                        <input mdInput placeholder="Solicitante" [mdAutocomplete]="auto" [formControl]="renterCtrl">
+                                    </md-input-container>
+                                    <md-autocomplete #auto="mdAutocomplete">
+                                        <md-option *ngFor="let renter of filteredRenters | async" [value]="renter.id">
+                                        {{ renter.full_name }}
+                                        </md-option>
+                                    </md-autocomplete>
+                                    <md-input-container class="full-width">
+                                        <textarea mdInput placeholder="Detalles"></textarea>
+                                    </md-input-container>
+                                </td-step>
+                                <td-step label="Cotización" sublabel="Consulta con proveedores" active="1">
+                                    <md-input-container class="full-width">
+                                        <input mdInput placeholder="Proveedor" [mdAutocomplete]="auto" [formControl]="renterCtrl">
+                                    </md-input-container>
+                                    <md-autocomplete #auto="mdAutocomplete">
+                                        <md-option *ngFor="let renter of filteredRenters | async" [value]="renter.id">
+                                        {{ renter.full_name }}
+                                        </md-option>
+                                    </md-autocomplete>
+                                    <md-input-container class="full-width">
+                                        <input type="number" mdInput placeholder="Cotización">
+                                    </md-input-container>
+                                    <md-input-container class="full-width">
+                                        <input type="number" mdInput placeholder="Tiempo estimado (semanas)">
+                                    </md-input-container>
+                                </td-step>
+                            </td-steps>
+                            <br>
+                        </md-tab>
+                    </md-tab-group>
                 </md-card>
             </div>
         </div>
