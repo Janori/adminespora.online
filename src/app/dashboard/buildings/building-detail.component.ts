@@ -1,7 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { StepState, TdMediaService } from '@covalent/core';
-import { Building, Renter, Rent } from '../../shared/models';
+import { Building, Renter, Rent, Ticket } from '../../shared/models';
 import { Subscription } from 'rxjs/Subscription';
 import { MdDialog, MdSnackBar } from '@angular/material';
 import { BuildingFormComponent } from './building-form.component';
@@ -14,6 +14,7 @@ import { FormControl } from '@angular/forms';
   templateUrl: './building-detail.component.html',
   styleUrls: ['./building-detail.component.scss']
 })
+
 export class BuildingDetailComponent implements OnInit {
     public building: Building;
     public isScreenGtSm: boolean = false;
@@ -36,6 +37,10 @@ export class BuildingDetailComponent implements OnInit {
 
     public files: any;
 
+    public activeTabIndex: number = 0;
+    public dynamicTabs: any = [
+    ];
+
     constructor(
         private _router: Router,
         private _route: ActivatedRoute,
@@ -48,6 +53,7 @@ export class BuildingDetailComponent implements OnInit {
     ngOnInit() {
         this.watchScreen();
         this.getBuilding();
+        this.getRenters();
     }
 
     ngOnDestroy(): void {
@@ -175,5 +181,16 @@ export class BuildingDetailComponent implements OnInit {
             if(result)
                 this.building.rent.id = 1;
         });
+    }
+
+    addTicket = () => {
+        console.log(this.renters,this.renterCtrl);
+        let ticket_id = Math.floor((Math.random() * 1000) + 1);
+        this.dynamicTabs.push({
+            label: 'Ticket #' + ticket_id,
+            data: new Ticket()
+        });
+
+        this.activeTabIndex = this.dynamicTabs.length - 1;
     }
 }
