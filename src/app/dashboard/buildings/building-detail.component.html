@@ -110,62 +110,76 @@
             <div fxFlex="100">
                 <md-card>
                     <md-card-title class="building-title">
-                        Manteniminetos
+                        Mantenimietos
                         <div class="building-actions">
                             <button md-raised-button color="primary" (click)="addTicket()">Crear mantenimiento</button>
                         </div>
                     </md-card-title>
-                    <md-tab-group class="tab-group" dynamicHeight [(selectedIndex)]="activeTabIndex">
-                        <md-tab *ngFor="let tab of dynamicTabs">
-                            <ng-template mdTabLabel>{{ tab.label }}</ng-template>
-                            <td-steps [mode]="isScreenGtSm ? 'horizontal' : 'vertical'">
-                                <td-step #step1 label="Datos del solicitante" sublabel="Identificación del solicitante" active="1">
-                                    <md-input-container class="full-width">
-                                        <input mdInput placeholder="Solicitante" [mdAutocomplete]="auto" [formControl]="renterCtrl">
-                                    </md-input-container>
-                                    <md-autocomplete #auto="mdAutocomplete">
-                                        <md-option *ngFor="let renter of filteredRenters | async" [value]="renter.id">
-                                        {{ renter.full_name }}
-                                        </md-option>
-                                    </md-autocomplete>
-                                    <md-input-container class="full-width">
-                                        <textarea mdInput placeholder="Detalles"></textarea>
-                                    </md-input-container>
-                                    <div class="step-actions">
-                                        <button md-raised-button color="primary" (click)="goToStep(step1, step2)">Iniciar cotización</button>
-                                    </div>
-                                </td-step>
-                                <td-step #step2 label="Cotización" sublabel="Consulta con proveedores">
-                                    <md-input-container class="full-width">
-                                        <input mdInput placeholder="Proveedor" [mdAutocomplete]="auto" [formControl]="renterCtrl">
-                                    </md-input-container>
-                                    <md-autocomplete #auto="mdAutocomplete">
-                                        <md-option *ngFor="let renter of filteredRenters | async" [value]="renter.id">
-                                        {{ renter.full_name }}
-                                        </md-option>
-                                    </md-autocomplete>
-                                    <md-input-container class="full-width">
-                                        <input type="number" mdInput placeholder="Cotización">
-                                    </md-input-container>
-                                    <md-input-container class="full-width">
-                                        <input type="number" mdInput placeholder="Tiempo estimado (semanas)">
-                                    </md-input-container>
-                                    <div class="step-actions">
-                                        <button md-raised-button color="primary" (click)="goToStep(step2, step3)">Enviar cotizacións</button>
-                                    </div>
-                                </td-step>
-                                <td-step #step3 label="Consulta con el cliente" sublabel="En espera de aprovación">
-                                    La cotización ha sido enviada al cliente, el cliente deberá decidir si se vaser o no sevaser.
-                                </td-step>
-                                <td-step #step4 label="Estado del ticket" sublabel="Cambiar el estado del mantenimiento">
-                                    <md-input-container class="full-width">
-                                        <input mdInput placeholder="Proveedor" [mdAutocomplete]="auto" [formControl]="renterCtrl">
-                                    </md-input-container>
-                                </td-step>
-                            </td-steps>
-                            <br>
-                        </md-tab>
-                    </md-tab-group>
+                    <div *ngIf="dynamicTabs.length != 0">
+                        <md-tab-group class="tab-group" dynamicHeight [(selectedIndex)]="activeTabIndex">
+                            <md-tab *ngFor="let tab of dynamicTabs; let i = index" #tab>
+                                <ng-template mdTabLabel>{{ tab.label }}</ng-template>
+                                <td-steps [mode]="isScreenGtSm ? 'horizontal' : 'vertical'">
+                                    <td-step #step1 label="Datos del solicitante" sublabel="Identificación del solicitante" active="1">
+                                        <md-input-container class="full-width">
+                                            <input mdInput placeholder="Solicitante" [mdAutocomplete]="auto" [formControl]="renterCtrl">
+                                        </md-input-container>
+                                        <md-autocomplete #auto="mdAutocomplete">
+                                            <md-option *ngFor="let renter of filteredRenters | async" [value]="renter.id">
+                                            {{ renter.full_name }}
+                                            </md-option>
+                                        </md-autocomplete>
+                                        <md-input-container class="full-width">
+                                            <textarea mdInput placeholder="Detalles"></textarea>
+                                        </md-input-container>
+                                        <div class="stepper-buttons">
+                                            <button md-raised-button color="primary" (click)="goToStep(step1, step2)">Iniciar cotización</button>
+                                        </div>
+                                    </td-step>
+                                    <td-step #step2 label="Cotización" sublabel="Consulta con proveedores" disabled="true">
+                                        <md-input-container class="full-width">
+                                            <input mdInput placeholder="Proveedor" [mdAutocomplete]="auto" [formControl]="renterCtrl">
+                                        </md-input-container>
+                                        <md-autocomplete #auto="mdAutocomplete">
+                                            <md-option *ngFor="let renter of filteredRenters | async" [value]="renter.id">
+                                            {{ renter.full_name }}
+                                            </md-option>
+                                        </md-autocomplete>
+                                        <md-input-container class="full-width">
+                                            <input type="number" mdInput placeholder="Cotización">
+                                        </md-input-container>
+                                        <md-input-container class="full-width">
+                                            <input type="number" mdInput placeholder="Tiempo estimado (semanas)">
+                                        </md-input-container>
+                                        <div class="stepper-buttons">
+                                            <button md-raised-button color="warn" (click)="cancelarTicket(i)">Cancelar ticket</button>
+                                            <button md-raised-button color="primary" (click)="goToStep(step2, step3)">Enviar cotización</button>
+                                        </div>
+                                    </td-step>
+                                    <td-step #step3 label="Contaco a proveedor" sublabel="lorem ipsum" disabled="true">
+                                        La cotización ha sido aceptada por el cliente.
+                                        <div class="stepper-buttons">
+                                            <button md-raised-button color="warn" (click)="cancelarTicket(i)">Cancelar ticket</button>
+                                            <button md-raised-button color="primary" (click)="goToStep(step3, step4)">Iniciar proceso</button>
+                                        </div>
+                                    </td-step>
+                                    <td-step #step4 label="Estado del ticket" sublabel="Cambiar el estado del mantenimiento" disabled="true">
+                                        <md-input-container class="full-width">
+                                            <textarea mdInput placeholder="Observaciones"></textarea>
+                                        </md-input-container>
+                                        <div class="stepper-buttons">
+                                            <button md-raised-button color="warn" (click)="cancelarTicket(i)">Cancelar ticket</button>
+                                            <button md-raised-button color="primary" (click)="finishTicket(i)">Cerrar ticket</button>
+                                        </div>
+                                    </td-step>
+                                </td-steps>
+                                <br>
+                            </md-tab>
+                        </md-tab-group>
+                    </div>
+                    <div *ngIf="dynamicTabs.length == 0">
+                        NO HAY TICKETS ACTIVOS EN ESTE INMUEBLE
+                    </div>
                 </md-card>
             </div>
         </div>

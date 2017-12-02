@@ -82,6 +82,7 @@ import { BuildingsComponent } from './dashboard/buildings/buildings.component';
 import { BuildingFormComponent } from './dashboard/buildings/building-form.component';
 import { BuildingDetailComponent } from './dashboard/buildings/building-detail.component';
 import { BuildingRentComponent } from './dashboard/buildings/building-rent.component';
+import { CancelTicketDialogComponent } from './dashboard/buildings/cancel-ticket-dialog/cancel-ticket-dialog.component';
 
 @NgModule({
   declarations: [
@@ -102,7 +103,8 @@ import { BuildingRentComponent } from './dashboard/buildings/building-rent.compo
     LoginComponent,
     BuildingDetailComponent,
     ConfirmDialogComponent,
-    BuildingRentComponent
+    BuildingRentComponent,
+    CancelTicketDialogComponent
   ],
   entryComponents: [
       ConfirmDialogComponent,
@@ -111,7 +113,8 @@ import { BuildingRentComponent } from './dashboard/buildings/building-rent.compo
       RenterFormComponent,
       ProviderFormComponent,
       BuildingFormComponent,
-      BuildingRentComponent
+      BuildingRentComponent,
+      CancelTicketDialogComponent
   ],
   imports: [
     BrowserModule,
