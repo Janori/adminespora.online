@@ -34,7 +34,7 @@ const appRoutes : Routes = [
         ],
         canActivate: [ AuthGuard ]
     },
-    { path: '**', component: DashboardComponent }
+    { path: '**', component: DashboardComponent, canActivate: [ AuthGuard ] }
 ];
 
 export const appRoutingProviders: Array<any> = [];
