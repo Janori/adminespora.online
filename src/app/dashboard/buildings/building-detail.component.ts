@@ -193,4 +193,9 @@ export class BuildingDetailComponent implements OnInit {
 
         this.activeTabIndex = this.dynamicTabs.length - 1;
     }
+
+    goToStep = (actualStep: any, nextStep: any) => {
+        actualStep.state    = StepState.Complete;
+        nextStep.active     = true;
+    }
 }
