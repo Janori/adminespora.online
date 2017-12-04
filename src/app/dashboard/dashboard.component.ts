@@ -2,6 +2,7 @@ import { Component, HostBinding, OnInit, AfterViewInit } from '@angular/core';
 import { ResizeService } from '../resize/resize.service';
 import { routerAnimation } from '../utils/page.animation';
 import { Router } from '@angular/router';
+import { Data } from '../shared/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -63,7 +64,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   doLogout = () => {
-      localStorage.setItem('isLogged', 'false');
+      Data.logOut();
       this._router.navigate(['login']);
   }
 

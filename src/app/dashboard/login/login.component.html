@@ -5,23 +5,25 @@
         <a href="/" class="push-bottom-md">
           <img src="/assets/logo/logo-text-black.png">
         </a>
-        <md-input-container fxFlexFill>
-          <input mdInput placeholder="Usuario" #loginInput>
-        </md-input-container>
-        <div class="push-top-sm">
-          <md-input-container fxFlexFill>
-            <input mdInput placeholder="Contraseña" type="password" #passwordInput>
-          </md-input-container>
-        </div>
-        <button md-raised-button color="primary" class="push-top-sm" (click)="login(loginInput.value, passwordInput.value)">
-          INICIAR SESIÓN
-          <i *ngIf="isLogging" class="fa fa-spinner fa-spin" aria-hidden="true"></i>
-        </button>
-        <!-- <p>Don't have an account? <a routerLink="/sign-up" class="primary-color">Sign up</a></p> -->
         <div *ngIf="error" class="badge">
-
           <span>Credenciales no válidas</span>
         </div>
+        <form>
+          <md-input-container fxFlexFill>
+            <input mdInput placeholder="Usuario" #loginInput>
+          </md-input-container>
+          <div class="push-top-sm">
+            <md-input-container fxFlexFill>
+              <input mdInput placeholder="Contraseña" type="password" #passwordInput>
+            </md-input-container>
+          </div>
+          <button type="submit" md-raised-button color="primary" class="push-top-sm" (click)="login(loginInput.value, passwordInput.value)">
+            INICIAR SESIÓN
+            <i *ngIf="isLogging" class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+          </button>
+        </form>
+        <!-- <p>Don't have an account? <a routerLink="/sign-up" class="primary-color">Sign up</a></p> -->
+
 
       </md-card-content>
     </md-card>

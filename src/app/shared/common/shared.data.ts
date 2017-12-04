@@ -4,8 +4,9 @@ export class Data{
   static user:User;
   static token:string;
   static access:any = {};
+  static expire_token:string;
 
-  private static ignoreRoutes = ['home'];
+  private static ignoreRoutes = ['^/$', '^$', '.*'];
 
   public static isLoggedIn() : boolean{
     let token:string = localStorage.getItem('auth_token');
@@ -20,25 +21,41 @@ export class Data{
     }
   }
 
+  public static logOut(){
+    localStorage.clear();
+    this.clear();
+  }
+  private static clear(){
+    this.user = null;
+    this.token = null;
+    this.access = null;
+  }
+
   public static loadFromStorage(force:boolean = false){
+    if(force){
+      this.clear();
+    }
     if((!Data.access || JSON.stringify(Data.access) === JSON.stringify({})) || force){
-      //console.log(localStorage.getItem('access'));
-      Data.access = JSON.parse(localStorage.getItem('access'));
+      let perms = localStorage.getItem('perms');
+      if(perms != null) Data.access = JSON.parse(perms);
     }
     if((!Data.token || Data.token === '') || force)
-      Data.token = localStorage.getItem('token');
-
-    if(!Data.user || force){
-      Data.user = JSON.parse(localStorage.getItem('user'));
+      Data.token = localStorage.getItem('auth_token');
+    if((!Data.expire_token || Data.expire_token == null) || force) Data.expire_token = localStorage.getItem('expiration_token');
+    if((!Data.user || JSON.stringify(Data.user) === JSON.stringify({})) || force){
+      let user = localStorage.getItem('user');
+      if(user != null) Data.user = JSON.parse(user);
     }
   }
 
   public static canAccess(path:string) : boolean{
     for(let r of Data.ignoreRoutes){
-      if(r === path){
+      let rgx = new RegExp(r);
+      if(rgx.test(path)){
         return true;
       }
     }
+    if(Data.access == null) return false;
     for(let a of Data.access){
       let rgx = new RegExp(a.path_regex);
       console.log(a.path_regex);

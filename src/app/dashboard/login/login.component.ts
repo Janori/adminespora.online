@@ -1,6 +1,7 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {routerAnimation} from '../../utils/page.animation';
+import {Service} from '../../services'
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,8 @@ import {routerAnimation} from '../../utils/page.animation';
 export class LoginComponent implements OnInit {
   // Add router animation
   @HostBinding('@routerAnimation') routerAnimation = true;
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private service:Service) { }
 
   isLogging = false;
   error = false;
@@ -28,12 +30,22 @@ export class LoginComponent implements OnInit {
       this.isLogging = true;
       this.error = false;
 
-      if(login != 'admin' || password != 'R3515t0l') {
+      this.service.getNewtoken(login, password).subscribe(res => {
+        if(res === true){
+          this.router.navigateByUrl('/');
+          this.isLogging = false;
+        }else{
+          if(res !== false){
+            console.error('LogErr', res);
+          }
           this.isLogging = false;
           this.error = true;
-          return;
-      }
-      this.isLogging = false;
+        }
+      }, error=>{
+        console.error('LogReq', error);
+        this.error = true;
+        this.isLogging = false;
+      });
 
       //localStorage.setItem('isLogged', 'true');
       //this.router.navigateByUrl('/');

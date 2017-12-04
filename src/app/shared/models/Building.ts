@@ -1,4 +1,5 @@
-import { Owner, Rent } from './';
+import { Owner } from './Owner';
+import { Rent } from './Rent';
 
 export class Building {
     public id: number;

@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { routing, appRoutingProviders} from './app.routing';
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
-import { AuthGuard } from './shared/security/auth.guard';
+import { AuthGuard, AccessGuard } from './shared/security';
 
 import {PerfectScrollbarConfigInterface, PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -82,6 +82,10 @@ import { BuildingsComponent } from './dashboard/buildings/buildings.component';
 import { BuildingFormComponent } from './dashboard/buildings/building-form.component';
 import { BuildingDetailComponent } from './dashboard/buildings/building-detail.component';
 import { BuildingRentComponent } from './dashboard/buildings/building-rent.component';
+
+//Servicios
+
+import { Service } from './services';
 
 @NgModule({
   declarations: [
@@ -173,7 +177,8 @@ import { BuildingRentComponent } from './dashboard/buildings/building-rent.compo
   providers: [
        { provide: LOCALE_ID, useValue: 'es-MX' },
       appRoutingProviders,
-      AuthGuard
+      AuthGuard, AccessGuard,
+      Service
   ],
   bootstrap: [AppComponent]
 })

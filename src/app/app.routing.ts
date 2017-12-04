@@ -1,6 +1,6 @@
 import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from './shared/security/auth.guard';
+import { AuthGuard, AccessGuard } from './shared/security';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './dashboard/home/home.component';
@@ -19,20 +19,21 @@ const appRoutes : Routes = [
         path: '',
         component: DashboardComponent,
         children: [
-            { path: '', component: HomeComponent },
-            { path: 'usuarios', component: UsersComponent },
-            { path: 'propietarios', component: OwnersComponent },
+            { path: '', component: HomeComponent, canActivate: [ AuthGuard, AccessGuard ] },
+            { path: 'usuarios', component: UsersComponent, canActivate: [ AuthGuard, AccessGuard ] },
+            { path: 'propietarios', component: OwnersComponent, canActivate: [ AuthGuard, AccessGuard ] },
             {
                 path: 'inmuebles',
                 children: [
-                    { path: '', component: BuildingsComponent },
-                    { path: ':id', component: BuildingDetailComponent },
-                ]
+                    { path: '', component: BuildingsComponent, canActivate: [ AuthGuard, AccessGuard ] },
+                    { path: ':id', component: BuildingDetailComponent, canActivate: [ AuthGuard, AccessGuard ] },
+                ],
+                canActivate: [ AuthGuard, AccessGuard ]
             },
-            { path: 'arrendatarios', component: RentersComponent },
-            { path: 'proveedores', component: ProvidersComponent },
+            { path: 'arrendatarios', component: RentersComponent, canActivate: [ AuthGuard ] },
+            { path: 'proveedores', component: ProvidersComponent, canActivate: [ AuthGuard, AccessGuard ] },
         ],
-        canActivate: [ AuthGuard ]
+        canActivate: [ AuthGuard, AccessGuard ]
     },
     { path: '**', component: DashboardComponent, canActivate: [ AuthGuard ] }
 ];
