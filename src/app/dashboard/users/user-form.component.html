@@ -10,6 +10,12 @@
         <md-input-container class="full-width">
           <input mdInput placeholder="Contraseña" [(ngModel)]="data.user.password" type="password">
         </md-input-container>
+        <md-input-container class="full-width">
+            <input type="email" mdInput placeholder="Usuario" [(ngModel)]="data.user.email">
+        </md-input-container>
+        <md-input-container class="full-width">
+          <input mdInput placeholder="Usuario" [(ngModel)]="data.user.full_name">
+        </md-input-container>
       </md-tab>
       <md-tab>
         <ng-template mdTabLabel>Mantenimiento</ng-template>

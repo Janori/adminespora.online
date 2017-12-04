@@ -1,6 +1,7 @@
 export class User {
     public id: number;
     public name: string;
+    public email: string;
     public first_surname: string;
     public last_surname: string;
     public role: string;
@@ -11,6 +12,7 @@ export class User {
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
         this.name = obj && obj.name || '';
+        this.email = obj && obj.email || '';
         this.first_surname = obj && obj.first_surname || '';
         this.last_surname = obj && obj.last_surname || '';
         this.role = obj && obj.role || null;
@@ -20,6 +22,22 @@ export class User {
     }
 
     get full_name() {
-        return `${this.name} ${this.first_surname} ${this.last_surname}`;
+        return `${this.name} ${this.first_surname} ${this.last_surname}`.trim();
+    }
+
+    set full_name(value: string) {
+        value = value.trim();
+        let [ name, firstSurname, lastSurname ] = value.split(' ');
+
+        if(name == undefined)
+            name = '';
+
+        if(firstSurname == undefined)
+            firstSurname = '';
+
+        if(lastSurname == undefined)
+            lastSurname = '';
+
+        [ this.name, this.first_surname, this.last_surname ] = [ name.trim(), firstSurname.trim(), lastSurname.trim() ];
     }
 }
