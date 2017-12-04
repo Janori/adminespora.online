@@ -9,7 +9,7 @@ export class Service {
   public mainUrl: string;
 
   constructor(public http:Http) {
-    this.mainUrl = 'http://localhost:8000/api/';
+    this.mainUrl = 'http://adminespora.janori.com/';
   }
 
   getNewtoken(email:string, secret:string){
