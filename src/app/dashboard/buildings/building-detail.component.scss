@@ -25,3 +25,9 @@
     overflow: hidden;
   }
 }
+
+/deep/ {
+    .stepper-buttons {
+        text-align: right;
+    }
+}

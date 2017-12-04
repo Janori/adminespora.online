@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { MdDialog, MdSnackBar } from '@angular/material';
 import { BuildingFormComponent } from './building-form.component';
 import { BuildingRentComponent } from './building-rent.component';
+import { CancelTicketDialogComponent } from './cancel-ticket-dialog/cancel-ticket-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components';
 import { FormControl } from '@angular/forms';
 
@@ -184,18 +185,48 @@ export class BuildingDetailComponent implements OnInit {
     }
 
     addTicket = () => {
-        console.log(this.renters,this.renterCtrl);
         let ticket_id = Math.floor((Math.random() * 1000) + 1);
         this.dynamicTabs.push({
             label: 'Ticket #' + ticket_id,
-            data: new Ticket()
+            data: new Ticket({
+                id: ticket_id
+            })
         });
 
         this.activeTabIndex = this.dynamicTabs.length - 1;
     }
 
     goToStep = (actualStep: any, nextStep: any) => {
-        actualStep.state    = StepState.Complete;
-        nextStep.active     = true;
+        actualStep.state        = StepState.Complete;
+        nextStep.disabled       = false;
+        nextStep.active         = true;
+    }
+
+    finishTicket = (index: number) => {
+        const dialogRef = this._mdDialog.open(CancelTicketDialogComponent, {
+            data: {
+                ticket: this.dynamicTabs[index]
+            }
+        });
+    }
+
+    cancelarTicket = (index: number) => {
+        const dialogRef = this._mdDialog.open(CancelTicketDialogComponent, {
+            data: {
+                ticket: this.dynamicTabs[index].data
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if(result == true) {
+                this._mdSnackbar.open('Ticket cancelado correctamente', 'Aceptar', {
+                    duration: 2000,
+                });
+
+                this.dynamicTabs.splice(index, 1);
+
+                console.log(this.dynamicTabs);
+            }
+        });
     }
 }
