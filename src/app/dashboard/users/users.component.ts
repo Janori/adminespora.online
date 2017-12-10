@@ -1,6 +1,7 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MdDialog, MdSnackBar } from '@angular/material';
+
 import {
   IPageChangeEvent,
   ITdDataTableColumn,
@@ -8,71 +9,35 @@ import {
   TdDataTableService,
   TdDataTableSortingOrder
 } from '@covalent/core';
-import {routerAnimation} from '../../utils/page.animation';
+
+import { routerAnimation } from '../../utils/page.animation';
 import { User } from '../../shared/models';
+import { UserService } from '../../shared/services';
 import { UserFormComponent } from './user-form.component';
 
-const NUMBER_FORMAT: (v: any) => any = (v: number) => v;
-const DECIMAL_FORMAT: (v: any) => any = (v: number) => v.toFixed(2);
-
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss'],
-  animations: [routerAnimation]
+    selector: 'app-users',
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.scss'],
+    animations: [routerAnimation],
+    providers: [ UserService ]
 })
+
 export class UsersComponent implements OnInit {
     public title: string;
 
-    constructor(private _router:Router,
+    constructor(private _userService: UserService,
+                private _router:Router,
                 private _dataTableService: TdDataTableService,
                 private _snackBar: MdSnackBar,
                 public dialog: MdDialog) {
 
                     this.title = 'Usuarios';
 
-              this.data = [
-                  new User({
-                      id: Math.floor((Math.random() * 1000) + 1),
-                      name: 'Jonathan',
-                      username: 'user1',
-                      password: null,
-                      first_surname: 'Anaya',
-                      role: 'Agente',
-                      created_at: '2017-09-05'
-                  }),
-                  new User({
-                      id: Math.floor((Math.random() * 1000) + 1),
-                      name: 'John',
-                      username: 'user2',
-                      password: null,
-                      first_surname: 'Doe 1',
-                      role: 'Agente',
-                      created_at: '2017-09-04'
-                  }),
-                  new User({
-                      id: Math.floor((Math.random() * 1000) + 1),
-                      name: 'John',
-                      username: 'user3',
-                      password: null,
-                      first_surname: 'Doe 2',
-                      role: 'Agente',
-                      created_at: '2017-09-03'
-                  }),
-                  new User({
-                      id: Math.floor((Math.random() * 1000) + 1),
-                      name: 'John',
-                      username: 'user4',
-                      password: null,
-                      first_surname: 'Doe 3',
-                      role: 'Agente',
-                      created_at: '2017-09-02'
-                  })
-              ];
         this.columns = [
             {name: 'id', label: '#', sortable: true},
             {name: 'full_name', label: 'Nombre', sortable: true},
-            {name: 'role', label: 'Rol', sortable: true},
+            {name: 'role.name', label: 'Rol', sortable: true},
             {name: 'created_at', label: 'Creado', sortable: true},
             {name: 'actions', label: 'Acciones', sortable: false },
         ];
@@ -100,7 +65,19 @@ export class UsersComponent implements OnInit {
   sortOrder: TdDataTableSortingOrder = TdDataTableSortingOrder.Descending;
 
   ngOnInit(): void {
+      this.getUsers();
     this.filter();
+  }
+
+  getUsers = () => {
+      this._userService.getAll().subscribe(result => {
+          this.data = [];
+
+          let users = result.data;
+              users.forEach(user => this.data.push(new User(user)));
+
+          this.filter();
+      });
   }
 
   sort(sortEvent: ITdDataTableSortChangeEvent): void {

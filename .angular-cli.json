@@ -28,6 +28,7 @@
           "../node_modules/owl.carousel/dist/assets/owl.theme.default.css"
       ],
       "scripts": [
+          "../node_modules/lscache/lscache.js",
           "../node_modules/hammerjs/hammer.min.js",
           "../node_modules/echarts/dist/echarts.js",
           "../node_modules/jquery/dist/jquery.js",

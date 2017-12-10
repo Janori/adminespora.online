@@ -1,0 +1,34 @@
+<h4 md-dialog-title>Detalles de {{ title }} - {{ data.customer.full_name }}</h4>
+<div md-dialog-content>
+    <md-input-container class="full-width">
+        <input mdInput placeholder="Nombre Completo" [(ngModel)]="data.customer.full_name">
+    </md-input-container>
+    <md-input-container class="full-width">
+        <input type="email" mdInput placeholder="Correo electrónico" [(ngModel)]="data.customer.email">
+    </md-input-container>
+    <br>
+    <md-divider></md-divider>
+    <br>
+    <md-input-container class="full-width">
+        <input mdInput placeholder="Calle" [(ngModel)]="data.customer.calle">
+    </md-input-container>
+    <md-input-container class="full-width">
+        <input mdInput placeholder="Colonia" [(ngModel)]="data.customer.colonia">
+    </md-input-container>
+    <md-input-container class="full-width">
+        <input mdInput placeholder="Codigo Postal" [(ngModel)]="data.customer.cp">
+    </md-input-container>
+    <md-input-container class="full-width">
+        <input mdInput placeholder="Municipio" [(ngModel)]="data.customer.municipio">
+    </md-input-container>
+    <md-input-container class="full-width">
+        <input mdInput placeholder="Estado" [(ngModel)]="data.customer.estado">
+    </md-input-container>
+    <md-input-container class="full-width">
+        <input mdInput placeholder="Pais" [(ngModel)]="data.customer.pais">
+    </md-input-container>
+</div>
+<div md-dialog-actions class="dialog-buttons">
+  <button md-button (click)="dialogRef.close(false)" color="warn">Cancelar</button>
+  <button md-button (click)="dialogRef.close(data.customer)" color="primary">Aceptar</button>
+</div>

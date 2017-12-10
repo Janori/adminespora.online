@@ -1,7 +1,7 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {routerAnimation} from '../../utils/page.animation';
-import {Service} from '../../services'
+import {Service} from '../../shared/services'
 
 @Component({
   selector: 'app-login',

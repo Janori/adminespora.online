@@ -8,10 +8,11 @@ import { MdDialogRef } from '@angular/material';
   styleUrls: ['./user-form.component.scss']
 })
 export class UserFormComponent implements OnInit {
-
+    public roles: any = [];
     constructor(
       @Inject(MD_DIALOG_DATA) public data: any,
       public dialogRef: MdDialogRef<UserFormComponent>) {
+          this.roles = lscache.get('roles');
     }
 
     ngOnInit() {

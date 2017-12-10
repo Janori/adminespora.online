@@ -49,7 +49,7 @@
               <md-icon>close</md-icon>
           </button>
       </md-toolbar>
-      <button md-raised-button class="quick-button" *ngFor="let action of quickActions" (click)="clickHandler()" color="primary">
+      <button md-raised-button class="quick-button" *ngFor="let action of quickActions" (click)="clickHandler(action.command)" color="primary">
           <p class="quick-text">
               {{ action.text }}
               <button md-mini-fab color="default">

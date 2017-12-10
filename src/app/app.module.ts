@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http, XHRBackend, RequestOptions, BrowserXhr, BaseRequestOptions, ResponseOptions, BaseResponseOptions, XSRFStrategy, CookieXSRFStrategy } from '@angular/http';
 
 import { routing, appRoutingProviders} from './app.routing';
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
@@ -63,59 +63,53 @@ export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
+
+import { Service } from './shared/services';
 import { OwlModule } from 'ngx-owl-carousel';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './dashboard/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './dashboard/home/home.component';
-import { DummyTableComponent } from './dashboard/dummy-table/dummy-table.component';
 import { UsersComponent } from './dashboard/users/users.component';
 import { UserFormComponent } from './dashboard/users/user-form.component';
-import { OwnersComponent } from './dashboard/owners/owners.component';
-import { OwnerFormComponent } from './dashboard/owners/owner-form.component';
-import { RentersComponent } from './dashboard/renters/renters.component';
-import { RenterFormComponent } from './dashboard/renters/renter-form.component';
-import { ProvidersComponent } from './dashboard/providers/providers.component';
-import { ProviderFormComponent } from './dashboard/providers/provider-form.component';
 import { BuildingsComponent } from './dashboard/buildings/buildings.component';
 import { BuildingFormComponent } from './dashboard/buildings/building-form.component';
 import { BuildingDetailComponent } from './dashboard/buildings/building-detail.component';
 import { BuildingRentComponent } from './dashboard/buildings/building-rent.component';
 import { CancelTicketDialogComponent } from './dashboard/buildings/cancel-ticket-dialog/cancel-ticket-dialog.component';
+import { CustomersComponent } from './dashboard/customers/customers.component';
+import { CustomerFormComponent } from './dashboard/customers/customer-form.component';
 
-//Servicios
+export function _createDefaultCookieXSRFStrategy() {
+    return new CookieXSRFStrategy();
+}
 
-import { Service } from './services';
+export function httpFactory(xhrBackend: XHRBackend, requestOptions: RequestOptions): Http {
+    return new Http(xhrBackend, requestOptions);
+}
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     HomeComponent,
-    DummyTableComponent,
     UsersComponent,
     UserFormComponent,
-    OwnersComponent,
-    OwnerFormComponent,
-    RentersComponent,
-    RenterFormComponent,
-    ProvidersComponent,
-    ProviderFormComponent,
     BuildingsComponent,
     BuildingFormComponent,
     LoginComponent,
     BuildingDetailComponent,
     ConfirmDialogComponent,
     BuildingRentComponent,
-    CancelTicketDialogComponent
+    CancelTicketDialogComponent,
+    CustomersComponent,
+    CustomerFormComponent
   ],
   entryComponents: [
       ConfirmDialogComponent,
       UserFormComponent,
-      OwnerFormComponent,
-      RenterFormComponent,
-      ProviderFormComponent,
+      CustomerFormComponent,
       BuildingFormComponent,
       BuildingRentComponent,
       CancelTicketDialogComponent
@@ -178,10 +172,16 @@ import { Service } from './services';
     routing
   ],
   providers: [
-       { provide: LOCALE_ID, useValue: 'es-MX' },
+      { provide: LOCALE_ID, useValue: 'es-MX' },
       appRoutingProviders,
       AuthGuard, AccessGuard,
-      Service
+      Service,
+      {provide: Http, useFactory: httpFactory, deps: [XHRBackend, RequestOptions]},
+      BrowserXhr,
+      {provide: RequestOptions, useClass: BaseRequestOptions},
+      {provide: ResponseOptions, useClass: BaseResponseOptions},
+      XHRBackend,
+      {provide: XSRFStrategy, useFactory: _createDefaultCookieXSRFStrategy},
   ],
   bootstrap: [AppComponent]
 })
