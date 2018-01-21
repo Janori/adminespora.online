@@ -14,6 +14,7 @@ import { routerAnimation } from '../../utils/page.animation';
 import { User } from '../../shared/models';
 import { UserService } from '../../shared/services';
 import { UserFormComponent } from './user-form.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
     selector: 'app-users',
@@ -120,31 +121,64 @@ export class UsersComponent implements OnInit {
           }
       });
       dialogRef.afterClosed().subscribe(result => {
-          console.log(result);
           if(result != false) {
-              this._snackBar.open('Usuario editado con éxito', 'Aceptar', {
-                  duration: 2000,
+              this._userService.edit(result).subscribe(result => {
+                  this._snackBar.open('Registro editado con éxito', 'Aceptar', {
+                      duration: 2000,
+                  });
+              }, error => {
+                  this._snackBar.open('Hubo un error en el servidor', 'Aceptar', {
+                      duration: 2000,
+                  });
               });
           }
       });
   }
 
   deleteUser = (row: any) => {
-      let index = null;
-
-      for(let i in this.data) {
-          if(this.data[i].id == row.id)
-            index = i;
+      if(row.id == JSON.parse(localStorage.getItem('user')).id) {
+          this._snackBar.open('No te puedes eliminar a ti mismo', 'Aceptar', {
+              duration: 2000,
+          });
+          return;
       }
 
-      this.data = this.data.filter(function(item) {
-	      return item.id != row.id
+      let title = `Se va a eliminar a ${ row.full_name }`;
+      let msg = '¿Estás seguro que deseas eliminar este registro?'
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+          data: {
+              title: title,
+              msg: msg,
+          }
       });
-      this.filteredData = this.data;
-      this.filteredTotal = this.data.length;
+      dialogRef.afterClosed().subscribe(result => {
+          if(result == true) {
+              this._userService.delete(row).subscribe(result => {
+                  if(result.status) {
+                      let index = null;
 
-      this._snackBar.open('Usuaio eliminado con éxito', 'Aceptar', {
-          duration: 2000,
+                      for(let i in this.data) {
+                          if(this.data[i].id == row.id)
+                          index = i;
+                      }
+
+                      this.data = this.data.filter(function(item) {
+                          return item.id != row.id
+                      });
+
+                      this.filteredData = this.data;
+                      this.filteredTotal = this.data.length;
+
+                      this._snackBar.open('Registro eliminado con éxito', 'Aceptar', {
+                          duration: 2000,
+                      });
+                  }
+              }, error => {
+                  this._snackBar.open('Hubo un error en el servidor', 'Aceptar', {
+                      duration: 2000,
+                  });
+              });
+          }
       });
   }
 

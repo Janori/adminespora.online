@@ -10,7 +10,9 @@ import {
 } from '@covalent/core';
 import {routerAnimation} from '../../utils/page.animation';
 import { Building } from '../../shared/models';
+import { BuildingService } from '../../shared/services';
 import { BuildingFormComponent } from './building-form.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 const NUMBER_FORMAT: (v: any) => any = (v: number) => v;
 const DECIMAL_FORMAT: (v: any) => any = (v: number) => v.toFixed(2);
@@ -19,13 +21,15 @@ const DECIMAL_FORMAT: (v: any) => any = (v: number) => v.toFixed(2);
   selector: 'app-buildings',
   templateUrl: './buildings.component.html',
   styleUrls: ['./buildings.component.scss'],
-  animations: [routerAnimation]
+  animations: [routerAnimation],
+  providers: [ BuildingService ]
 })
 export class BuildingsComponent implements OnInit {
     public title: string;
 
     constructor(private _router:Router,
                 private _dataTableService: TdDataTableService,
+                private _buildingService: BuildingService,
                 private _snackBar: MdSnackBar,
                 public dialog: MdDialog) {
 
@@ -132,21 +136,42 @@ export class BuildingsComponent implements OnInit {
   }
 
   deleteBuilding = (row: any) => {
-      let index = null;
-
-      for(let i in this.data) {
-          if(this.data[i].id == row.id)
-            index = i;
-      }
-
-      this.data = this.data.filter(function(item) {
-	      return item.id != row.id
+      let title = `Se va a eliminar al inmueble #${ row.id }`;
+      let msg = '¿Estás seguro que deseas eliminar este registro?'
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+          data: {
+              title: title,
+              msg: msg,
+          }
       });
-      this.filteredData = this.data;
-      this.filteredTotal = this.data.length;
+      dialogRef.afterClosed().subscribe(result => {
+          if(result == true) {
+              this._buildingService.delete(row).subscribe(result => {
+                  if(result.status) {
+                      let index = null;
 
-      this._snackBar.open('Inmueble eliminado con éxito', 'Aceptar', {
-          duration: 2000,
+                      for(let i in this.data) {
+                          if(this.data[i].id == row.id)
+                          index = i;
+                      }
+
+                      this.data = this.data.filter(function(item) {
+                          return item.id != row.id
+                      });
+
+                      this.filteredData = this.data;
+                      this.filteredTotal = this.data.length;
+
+                      this._snackBar.open('Registro eliminado con éxito', 'Aceptar', {
+                          duration: 2000,
+                      });
+                  }
+              }, error => {
+                  this._snackBar.open('Hubo un error en el servidor', 'Aceptar', {
+                      duration: 2000,
+                  });
+              });
+          }
       });
   }
 

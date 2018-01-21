@@ -89,12 +89,12 @@ export class Service implements BasicCrud {
     }
 
     edit = (data: any) => {
-        return this._http.put(this.requestUrl + data.id, data, { headers: this.headers(HeaderType.Authorization, HeaderType.Json)})
+        return this._http.put(`${ this.requestUrl }/${ data.id} `, data, { headers: this.headers(HeaderType.Authorization, HeaderType.Json)})
                          .map(res => res.json());
     }
 
     delete = (data: any) => {
-        return this._http.delete(this.requestUrl + data.id, { headers: this.headers(HeaderType.Authorization, HeaderType.Json)})
+        return this._http.delete(`${ this.requestUrl }/${ data.id }`, { headers: this.headers(HeaderType.Authorization, HeaderType.Json)})
                          .map(res => res.json());
     }
 

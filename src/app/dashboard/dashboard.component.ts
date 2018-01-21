@@ -5,13 +5,14 @@ import { Router } from '@angular/router';
 import { Data } from '../shared/common';
 import { MdDialog, MdSnackBar } from '@angular/material';
 
-import { User, Customer } from '../shared/models';
+import { User, Customer, Building } from '../shared/models';
 import { UserFormComponent } from './users/user-form.component';
 import { CustomerFormComponent } from './customers/customer-form.component';
-// import { BuildingFormComponent } from './buildings/building-form.component';
+import { BuildingFormComponent } from './buildings/building-form.component';
 
 import { DashboardService } from '../shared/services/dashboard.service';
 import { UserService } from '../shared/services/user.service';
+import { BuildingService } from '../shared/services/building.service';
 import { CustomerService } from '../shared/services/customer.service';
 
 
@@ -20,7 +21,7 @@ import { CustomerService } from '../shared/services/customer.service';
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
     animations: [ routerAnimation ],
-    providers: [ DashboardService, UserService, CustomerService ]
+    providers: [ DashboardService, UserService, CustomerService, BuildingService ]
 })
 
 export class DashboardComponent implements OnInit, AfterViewInit {
@@ -54,6 +55,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         private _userService: UserService,
         private _customerService: CustomerService,
         private _dashboardService: DashboardService,
+        private _buildingService: BuildingService,
         public resizeService: ResizeService) {
     }
 
@@ -106,8 +108,23 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             dialogRef.afterClosed().subscribe(result => {
                 if(result != false) {
                     this._userService.create(result).subscribe(result => {
-
                         this._mdSnackbar.open('no', 'Aceptar', {
+                            duration: 2000,
+                        });
+                    });
+                }
+            });
+        } else if(command == 'add_building') {
+            const dialogRef = this._mdDialog.open(BuildingFormComponent, {
+                width: '700px',
+                data: {
+                    building: new Building(),
+                }
+            });
+            dialogRef.afterClosed().subscribe(result => {
+                if(result != false) {
+                    this._buildingService.create(result).subscribe(result => {
+                        this._mdSnackbar.open('Inmueble añadido con éxito', 'Aceptar', {
                             duration: 2000,
                         });
                     });

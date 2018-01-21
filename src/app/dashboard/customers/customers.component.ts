@@ -14,6 +14,7 @@ import { routerAnimation } from '../../utils/page.animation';
 import { Customer } from '../../shared/models';
 import { CustomerService } from '../../shared/services';
 import { CustomerFormComponent } from './customer-form.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
     selector: 'app-customers',
@@ -119,7 +120,7 @@ export class CustomersComponent implements OnInit {
         this.filteredData = newData;
     }
 
-    editUser = (customer?: Customer) => {
+    editCustomer = (customer?: Customer) => {
       const dialogRef = this.dialog.open(CustomerFormComponent, {
           width: '700px',
           data: {
@@ -130,32 +131,57 @@ export class CustomersComponent implements OnInit {
           }
       });
       dialogRef.afterClosed().subscribe(result => {
-          console.log(result);
           if(result != false) {
-              this._snackBar.open('Usuario editado con éxito', 'Aceptar', {
-                  duration: 2000,
+              this._customerService.edit(result).subscribe(result => {
+                  this._snackBar.open('Registro editado con éxito', 'Aceptar', {
+                      duration: 2000,
+                  });
+              }, error => {
+                  this._snackBar.open('Hubo un error en el servidor', 'Aceptar', {
+                      duration: 2000,
+                  });
               });
           }
       });
     }
 
-    deleteUser = (row: any) => {
-        let index = null;
-
-        for(let i in this.data) {
-            if(this.data[i].id == row.id)
-                index = i;
-        }
-
-        this.data = this.data.filter(function(item) {
-            return item.id != row.id
+    deleteCustomer = (row: any) => {
+        let title = `Se va a eliminar a ${ row.full_name }`;
+        let msg = '¿Estás seguro que deseas eliminar este registro?'
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            data: {
+                title: title,
+                msg: msg,
+            }
         });
+        dialogRef.afterClosed().subscribe(result => {
+            if(result == true) {
+                this._customerService.delete(row).subscribe(result => {
+                    if(result.status) {
+                        let index = null;
 
-        this.filteredData = this.data;
-        this.filteredTotal = this.data.length;
+                        for(let i in this.data) {
+                            if(this.data[i].id == row.id)
+                            index = i;
+                        }
 
-        this._snackBar.open('Usuaio eliminado con éxito', 'Aceptar', {
-            duration: 2000,
+                        this.data = this.data.filter(function(item) {
+                            return item.id != row.id
+                        });
+
+                        this.filteredData = this.data;
+                        this.filteredTotal = this.data.length;
+
+                        this._snackBar.open('Registro eliminado con éxito', 'Aceptar', {
+                            duration: 2000,
+                        });
+                    }
+                }, error => {
+                    this._snackBar.open('Hubo un error en el servidor', 'Aceptar', {
+                        duration: 2000,
+                    });
+                });
+            }
         });
     }
 

@@ -9,11 +9,13 @@ import { BuildingRentComponent } from './building-rent.component';
 import { CancelTicketDialogComponent } from './cancel-ticket-dialog/cancel-ticket-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components';
 import { FormControl } from '@angular/forms';
+import { BuildingService } from '../../shared/services/building.service';
 
 @Component({
   selector: 'app-building-detail',
   templateUrl: './building-detail.component.html',
-  styleUrls: ['./building-detail.component.scss']
+  styleUrls: ['./building-detail.component.scss'],
+  providers: [ BuildingService ]
 })
 
 export class BuildingDetailComponent implements OnInit {
@@ -48,7 +50,8 @@ export class BuildingDetailComponent implements OnInit {
         private _mdDialog: MdDialog,
         private _mdSnackbar: MdSnackBar,
         private _mediaService: TdMediaService,
-        private _ngZone: NgZone
+        private _ngZone: NgZone,
+        private _buildingService: BuildingService
     ) { }
 
     ngOnInit() {
@@ -107,10 +110,12 @@ export class BuildingDetailComponent implements OnInit {
             }
         });
         dialogRef.afterClosed().subscribe(result => {
-            console.log(result);
             if(result != false) {
-                this._mdSnackbar.open('Inmueble editado con éxito', 'Aceptar', {
-                    duration: 2000,
+                this._buildingService.edit(result).subscribe(result => {
+                    if(result.status)
+                        this._mdSnackbar.open('Inmueble editado con éxito', 'Aceptar', {
+                            duration: 2000,
+                        });
                 });
             }
         });
@@ -126,7 +131,21 @@ export class BuildingDetailComponent implements OnInit {
             }
         });
         dialogRef.afterClosed().subscribe(result => {
-            console.log(result);
+            if(result == true) {
+                this._buildingService.delete(building).subscribe(result => {
+                    if(result.status) {
+                        this._mdSnackbar.open('Registro eliminado con éxito', 'Aceptar', {
+                            duration: 2000,
+                        });
+
+                        this._router.navigate(['/', 'inmuebles']);
+                    }
+                }, error => {
+                    this._mdSnackbar.open('Hubo un error en el servidor', 'Aceptar', {
+                        duration: 2000,
+                    });
+                });
+            }
         });
     }
 
