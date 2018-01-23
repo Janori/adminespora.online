@@ -33,33 +33,12 @@ export class BuildingsComponent implements OnInit {
                 private _snackBar: MdSnackBar,
                 public dialog: MdDialog) {
 
-                    this.title = 'Inmuebles';
-
-              this.data = [
-                  new Building({
-                      id: Math.floor((Math.random() * 1000) + 1),
-                      is_new: true,
-                      address: 'Calle Real #1233',
-                      rent_price: 5500,
-                      comision: 10,
-                      plazo_minimo: 2,
-                      no_depositos: 1,
-                      costo_mto: 500,
-                      habitaciones: 3,
-                      banos: 3,
-                      estacionamientos: 0,
-                      patios: 0,
-                      terreno: 3000,
-                      construccion: 3500,
-                      ano_contruccion: 1990,
-                      predial: 500,
-                  }),
-              ];
+        this.title = 'Inmuebles';
         this.columns = [
             {name: 'id', label: '#', sortable: true},
-            {name: 'terreno', label: 'Terreno (m2)', sortable: true},
-            {name: 'habitaciones', label: 'Habitaciones', sortable: true},
-            {name: 'rent_price', label: 'Precio de Renta ($)', sortable: true},
+            {name: 'land.surface', label: 'Terreno (m2)', sortable: true},
+            {name: 'housing.rooms', label: 'Habitaciones', sortable: true},
+            {name: 'price', label: 'Precio de Renta ($)', sortable: true},
             {name: 'actions', label: 'Acciones', sortable: false },
         ];
       this.filteredData = this.data;
@@ -86,7 +65,19 @@ export class BuildingsComponent implements OnInit {
   sortOrder: TdDataTableSortingOrder = TdDataTableSortingOrder.Descending;
 
   ngOnInit(): void {
-    this.filter();
+      this.getBuildings();
+      this.filter();
+  }
+
+  getBuildings() {
+      this._buildingService.getAll().subscribe(result => {
+          this.data = [];
+
+          let users = result.data;
+              users.forEach(user => this.data.push(new Building(user)));
+
+          this.filter();
+      });
   }
 
   sort(sortEvent: ITdDataTableSortChangeEvent): void {

@@ -1,7 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { StepState, TdMediaService } from '@covalent/core';
-import { Building, Renter, Rent, Ticket } from '../../shared/models';
+import { Building, Ticket, Customer } from '../../shared/models';
 import { Subscription } from 'rxjs/Subscription';
 import { MdDialog, MdSnackBar } from '@angular/material';
 import { BuildingFormComponent } from './building-form.component';
@@ -22,7 +22,7 @@ export class BuildingDetailComponent implements OnInit {
     public building: Building;
     public isScreenGtSm: boolean = false;
     public querySubscription: Subscription;
-    public renters: Renter[];
+    public renters: Customer[];
     public renterCtrl: FormControl;
     public filteredRenters: any;
 
@@ -80,24 +80,10 @@ export class BuildingDetailComponent implements OnInit {
 
     getBuilding = () => {
         this._route.params.forEach((params : Params) => {
-            this.building = new Building({
-                id: params.id,
-                is_new: true,
-                address: 'Calle Real #1233',
-                rent_price: 5500,
-                comision: 10,
-                plazo_minimo: 2,
-                no_depositos: 1,
-                costo_mto: 500,
-                habitaciones: 3,
-                banos: 3,
-                estacionamientos: 0,
-                patios: 0,
-                terreno: 3000,
-                construccion: 3500,
-                ano_contruccion: 1990,
-                predial: 500,
-                owner_id: 12
+            let id = params['id'];
+
+            this._buildingService.getOne(id).subscribe(result => {
+                this.building = new Building(result.data);
             });
         });
     }
@@ -150,23 +136,11 @@ export class BuildingDetailComponent implements OnInit {
     }
 
     rentBuilding = (building?: Building) => {
-        this.building.rent = new Rent({
-            // owner: this.data.building.owner,
-            owner_id: this.building.owner_id,
-            precio_minimo: this.building.rent_price,
-        });
         this.getRenters();
     }
 
     getRenters = () => {
         this.renters = [
-            new Renter({
-                id: Math.floor((Math.random() * 1000) + 1),
-                name: 'Alejandro',
-                first_surname: 'Gori',
-                address: 'Calle real #' + Math.floor((Math.random() * 1000) + 1),
-                phone: '333' + Math.floor((Math.random() * 1000) + 1) +  '082',
-            })
         ];
 
         this.renterCtrl = new FormControl();

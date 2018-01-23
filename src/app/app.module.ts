@@ -66,6 +66,8 @@ export function createTranslateLoader(http: HttpClient) {
 
 import { Service } from './shared/services';
 import { OwlModule } from 'ngx-owl-carousel';
+import { NgxCarouselModule } from 'ngx-carousel';
+import 'hammerjs';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './dashboard/login/login.component';
@@ -161,6 +163,7 @@ export function httpFactory(xhrBackend: XHRBackend, requestOptions: RequestOptio
     CovalentCommonModule,
     ResizeModule,
     HttpClientModule,
+    NgxCarouselModule,
     TranslateModule.forRoot({
     loader: {
       provide: TranslateLoader,

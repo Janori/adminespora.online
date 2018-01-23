@@ -33,7 +33,7 @@ export class UsersComponent implements OnInit {
                 private _snackBar: MdSnackBar,
                 public dialog: MdDialog) {
 
-                    this.title = 'Usuarios';
+        this.title = 'Usuarios';
 
         this.columns = [
             {name: 'id', label: '#', sortable: true},
@@ -67,7 +67,7 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
       this.getUsers();
-    this.filter();
+      this.filter();
   }
 
   getUsers = () => {

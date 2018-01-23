@@ -79,7 +79,7 @@ export class Service implements BasicCrud {
     }
 
     getOne = (id: number) => {
-        return this._http.get(this.requestUrl + id, { headers: this.headers(HeaderType.Authorization, HeaderType.Json)})
+        return this._http.get(`${ this.requestUrl}/${ id }`, { headers: this.headers(HeaderType.Authorization, HeaderType.Json)})
                          .map(res => res.json());
     }
 
