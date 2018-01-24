@@ -1,65 +1,92 @@
 <h4 md-dialog-title>Detalles de Inmueble #{{ data.building.id }}</h4>
 <div md-dialog-content>
-    <md-checkbox [(ngModel)]="data.building.warehouse.is_new">¿Es nuevo?</md-checkbox>
-    <br>
-    <md-select placeholder="Tipo de inmbueble" [(ngModel)]="data.building.kind" class="full-width">
-        <md-option value="Casas">Casas</md-option>
-        <md-option value="Departamentos">Departamentos</md-option>
-        <md-option value="Oficinas">Oficinas</md-option>
-        <md-option value="Terrenos">Terrenos</md-option>
-        <md-option value="Edificios">Edificios</md-option>
-        <md-option value="Parques industriales">Parques industriales</md-option>
-        <md-option value="Plantas industriales">Plantas industriales</md-option>
-        <md-option value="Hoteles">Hoteles</md-option>
-        <md-option value="Ranchos">Ranchos</md-option>
-        <md-option value="Haciendas y quintas/Granjas">Haciendas y quintas/Granjas</md-option>
-        <md-option value="Predio rustico">Predio rustico</md-option>
-    </md-select>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Dirección" [(ngModel)]="data.building.land.location">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Superficie (m2)" [(ngModel)]="data.building.land.surface" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Costo del predial" [(ngModel)]="data.building.land.predial_cost" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Precio de renta" [(ngModel)]="data.building.price" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="% Comision" min="1" max="100" [(ngModel)]="data.building.com_percent" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Plazo mínimo" [(ngModel)]="data.building.minimum_rent_period" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="No. depositos" [(ngModel)]="data.building.deposit_number" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Costo de mantenimiento ($)" [(ngModel)]="data.building.maintenance_cost" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Habitaciones" [(ngModel)]="data.building.housing.rooms" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Baños" [(ngModel)]="data.building.office.baths" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Estacionamientos" [(ngModel)]="data.building.office.parkings" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Patios" [(ngModel)]="data.building.office.yards" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Terreno de construccion (m2)" [(ngModel)]="data.building.warehouse.build_surface" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Año de construccion" [(ngModel)]="data.building.warehouse.building_year" type="number">
-    </md-input-container>
-    <md-input-container class="full-width">
-        <textarea mdInput placeholder="Comentarios...." [(ngModel)]="data.building.extra_data"></textarea>
-    </md-input-container>
+    <md-tab-group dynamicHeight>
+        <md-tab>
+            <ng-template mdTabLabel>Información básica</ng-template>
+            <md-checkbox [(ngModel)]="data.building.warehouse.is_new">¿Es nuevo?</md-checkbox>
+            <br>
+            <md-select placeholder="Tipo de inmbueble" [(ngModel)]="data.building.kind" class="full-width">
+                <md-option value="Casas">Casas</md-option>
+                <md-option value="Departamentos">Departamentos</md-option>
+                <md-option value="Oficinas">Oficinas</md-option>
+                <md-option value="Terrenos">Terrenos</md-option>
+                <md-option value="Edificios">Edificios</md-option>
+                <md-option value="Parques industriales">Parques industriales</md-option>
+                <md-option value="Plantas industriales">Plantas industriales</md-option>
+                <md-option value="Hoteles">Hoteles</md-option>
+                <md-option value="Ranchos">Ranchos</md-option>
+                <md-option value="Haciendas y quintas/Granjas">Haciendas y quintas/Granjas</md-option>
+                <md-option value="Predio rustico">Predio rustico</md-option>
+            </md-select>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Dirección" [(ngModel)]="data.building.land.location">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Superficie (m2)" [(ngModel)]="data.building.land.surface" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Costo del predial" [(ngModel)]="data.building.land.predial_cost" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Precio de renta" [(ngModel)]="data.building.price" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="% Comision" min="1" max="100" [(ngModel)]="data.building.com_percent" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Plazo mínimo" [(ngModel)]="data.building.minimum_rent_period" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="No. depositos" [(ngModel)]="data.building.deposit_number" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Costo de mantenimiento ($)" [(ngModel)]="data.building.maintenance_cost" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Habitaciones" [(ngModel)]="data.building.housing.rooms" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Baños" [(ngModel)]="data.building.office.baths" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Estacionamientos" [(ngModel)]="data.building.office.parkings" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Patios" [(ngModel)]="data.building.office.yards" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Terreno de construccion (m2)" [(ngModel)]="data.building.warehouse.build_surface" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Año de construccion" [(ngModel)]="data.building.warehouse.building_year" type="number">
+            </md-input-container>
+            <md-input-container class="full-width">
+                <textarea mdInput placeholder="Comentarios...." [(ngModel)]="data.building.extra_data"></textarea>
+            </md-input-container>
+        </md-tab>
+        <md-tab>
+            <ng-template mdTabLabel>Imágenes</ng-template>
+            <div class="dropzone"
+            appDnd
+            (filesChangeEmiter)="onFilesChange($event)"
+            [allowedExtensions]="['png', 'jpg', 'bmp']">
+                <div class="text-wrapper">
+                    <div class="centered">
+                        Arrastra aquí tu imágenes
+                    </div>
+                </div>
+            </div>
+
+            <md-grid-list cols="4" rowHeight="100px" gutterSize="30px">
+                <md-grid-tile class="md-whiteframe-6dp"
+                    *ngFor="let image of data.building.images"
+                    [colspan]="1"
+                    [rowspan]="1">
+                    <img [src]="'http://adminespora.janori.com/' + image.path" class="img-thumbnail" alt="">
+                </md-grid-tile>
+            </md-grid-list>
+        </md-tab>
+    </md-tab-group>
 </div>
 <div md-dialog-actions class="dialog-example-buttons">
   <button md-button (click)="dialogRef.close(false)" color="warn">Cancelar</button>

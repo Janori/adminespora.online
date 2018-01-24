@@ -6,7 +6,7 @@
                     <md-card-title class="building-title">
                         Inmueble #{{ building.id }}
                         <div class="building-actions">
-                            <button md-raised-button color="accent" (click)="rentBuilding(building)" *ngIf="building.rent_status == 1">Rentar</button>
+                            <!-- <button md-raised-button color="accent" (click)="rentBuilding(building)" *ngIf="building.rent_status == 1">Rentar</button> -->
                             <button md-raised-button color="primary" (click)="editBuilding(building)">Editar</button>
                             <button md-raised-button color="warn" (click)="deleteBuilding(building)">Eliminar</button>
                         </div>
@@ -18,23 +18,21 @@
             <div fxFlex="100">
                 <md-card>
                     <md-card-title>Ficha técnica del inmueble</md-card-title>
-                        <!-- <owl-carousel
-                         [options]="{items: 3, dots: true, navigation: true}"
-                         [carouselClasses]="['owl-theme', 'row', 'sliding']">
-                             <div class="item">
-                                 <div class="thumbnail-image" style="background: url('assets/photo-1462396240927-52058a6a84ec.jpg') no-repeat scroll center center / 600px 600px"></div>
-                             </div>
-                             <div class="item">
-                                 <div class="thumbnail-image" style="background: url('assets/photo-1462396240927-52058a6a84ec.jpg') no-repeat scroll center center / 600px 600px"></div>
-                             </div>
-                             <div class="item">
-                                 <div class="thumbnail-image" style="background: url('assets/photo-1462396240927-52058a6a84ec.jpg') no-repeat scroll center center / 600px 600px"></div>
-                             </div>
-                        </owl-carousel> -->
+                    <ngx-carousel
+                    [inputs]="carouselOne"
+                    (carouselLoad)="myfunc($event)">
+
+                        <ngx-tile NgxCarouselItem *ngFor="let image of building.images">
+                            <img [src]="'http://adminespora.janori.com/' + image.path" alt="">
+                        </ngx-tile>
+
+                        <button NgxCarouselPrev class='leftRs'>&lt;</button>
+                        <button NgxCarouselNext class='rightRs'>&gt;</button>
+                    </ngx-carousel>
                 </md-card>
             </div>
         </div>
-        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap *ngIf="building.rent_status == 2">
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap *ngIf="false">
             <div fxFlex="100">
                 <md-card>
                     <md-card-title>Trámite de arrendamiento</md-card-title>
@@ -98,7 +96,7 @@
                 </md-card>
             </div>
         </div>
-        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap *ngIf="building.rent_status == 3">
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap *ngIf="false">
             <div fxFlex="100">
                 <md-card>
                     <md-card-title class="building-titile">Rentas</md-card-title>

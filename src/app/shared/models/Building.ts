@@ -18,6 +18,8 @@ export class Building {
     public deposit_number: number;
     public extra_data: string;
 
+    public images: any = [];
+
     public rent: any = {
         document_url: ''
     };
@@ -50,5 +52,10 @@ export class Building {
         this.housing = obj && 'housing' in obj ? new Housing(obj.housing) : new Housing();
         this.office = obj && 'office' in obj ? new Office(obj.office) : new Office();
         this.warehouse = obj && 'warehouse' in obj ? new Warehouse(obj.warehouse) : new Warehouse();
+
+        if(obj && 'images' in obj && Array.isArray(obj.images)) {
+            for(let image of obj.images)
+                this.images.push(image);
+        }
     }
 }

@@ -69,6 +69,8 @@ import { OwlModule } from 'ngx-owl-carousel';
 import { NgxCarouselModule } from 'ngx-carousel';
 import 'hammerjs';
 
+import { DndDirective } from './shared/directives/dnd.directive';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './dashboard/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -93,6 +95,7 @@ export function httpFactory(xhrBackend: XHRBackend, requestOptions: RequestOptio
 
 @NgModule({
   declarations: [
+    DndDirective,
     AppComponent,
     DashboardComponent,
     HomeComponent,

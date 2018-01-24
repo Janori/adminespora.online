@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { StepState, TdMediaService } from '@covalent/core';
 import { Building, Ticket, Customer } from '../../shared/models';
@@ -10,12 +10,14 @@ import { CancelTicketDialogComponent } from './cancel-ticket-dialog/cancel-ticke
 import { ConfirmDialogComponent } from '../../shared/components';
 import { FormControl } from '@angular/forms';
 import { BuildingService } from '../../shared/services/building.service';
+import { NgxCarousel } from 'ngx-carousel';
 
 @Component({
-  selector: 'app-building-detail',
-  templateUrl: './building-detail.component.html',
-  styleUrls: ['./building-detail.component.scss'],
-  providers: [ BuildingService ]
+    selector: 'app-building-detail',
+    templateUrl: './building-detail.component.html',
+    styleUrls: ['./building-detail.component.scss'],
+    providers: [ BuildingService ],
+    encapsulation: ViewEncapsulation.None
 })
 
 export class BuildingDetailComponent implements OnInit {
@@ -25,6 +27,9 @@ export class BuildingDetailComponent implements OnInit {
     public renters: Customer[];
     public renterCtrl: FormControl;
     public filteredRenters: any;
+
+    public carouselOne: NgxCarousel;
+    public carouselTileItems: Array<any>;
 
     public stateStep1: StepState = StepState.Required;
     public stateStep2: StepState = StepState.None;
@@ -52,12 +57,36 @@ export class BuildingDetailComponent implements OnInit {
         private _mediaService: TdMediaService,
         private _ngZone: NgZone,
         private _buildingService: BuildingService
-    ) { }
+    ) {
+        this.building = new Building();
+    }
 
     ngOnInit() {
+        this.carouselTileItems = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+
+        this.carouselOne = {
+            grid: {xs: 1, sm: 1, md: 1, lg: 1, all: 0},
+            slide: 1,
+            speed: 400,
+            interval: 4000,
+            point: {
+            visible: true
+            },
+            load: 2,
+            touch: true,
+            loop: true,
+            custom: 'banner'
+        }
+
         this.watchScreen();
         this.getBuilding();
         this.getRenters();
+    }
+
+    myfunc(event: Event) {
+     // carouselLoad will trigger this funnction when your load value reaches
+     // it is helps to load the data by parts to increase the performance of the app
+     // must use feature to all carousel
     }
 
     ngOnDestroy(): void {

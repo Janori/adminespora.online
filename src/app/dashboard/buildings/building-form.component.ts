@@ -1,18 +1,37 @@
 import { Component, OnInit, Inject, ViewChild, Pipe } from '@angular/core';
 import { MD_DIALOG_DATA } from '@angular/material';
 import { MdDialogRef } from '@angular/material';
+import { BuildingService } from '../../shared/services/building.service';
 
 @Component({
-  selector: 'app-building-form',
-  templateUrl: './building-form.component.html',
-  styleUrls: ['./building-form.component.scss']
+    selector: 'app-building-form',
+    templateUrl: './building-form.component.html',
+    styleUrls: ['./building-form.component.scss'],
+    providers: [ BuildingService ]
 })
+
 export class BuildingFormComponent implements OnInit {
     constructor(
-      @Inject(MD_DIALOG_DATA) public data: any,
-      public dialogRef: MdDialogRef<BuildingFormComponent>) {
+        @Inject(MD_DIALOG_DATA) public data: any,
+        public dialogRef: MdDialogRef<BuildingFormComponent>,
+        private _buildingService: BuildingService) {
     }
 
     ngOnInit() {
+    }
+
+    onFilesChange(fileList: File[]) {
+
+
+        if(!Array.isArray(fileList) || fileList.length  == 0)
+            alert('Hubo un error al cargar el archivo')
+        else {
+            let formData = new FormData();
+            let file = fileList[0];
+            formData.append('image', file, file.name);
+            this._buildingService.uploadImage(this.data.building.id, formData).subscribe(result => {
+                this.data.building.images.push(result.data);
+            });
+        }
     }
 }

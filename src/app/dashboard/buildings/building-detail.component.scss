@@ -17,6 +17,10 @@
     }
 }
 
+.tile {
+    text-align: center;
+}
+
 :host {
   /deep/ .mat-tab-body-content {
     padding: 12px;

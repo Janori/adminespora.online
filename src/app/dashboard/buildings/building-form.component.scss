@@ -7,3 +7,30 @@
 .mat-accent#md-checkbox-1 {
     display: table;
 }
+
+.dropzone {
+    min-height: 150px;
+    min-width: 250px;
+    max-width: 100%;
+    display: table;
+    margin: 0 auto;
+    width: 90%;
+    background-color: #eee;
+    border: dotted 5px #aaa;
+
+    .centered {
+        text-align: center;
+    }
+}
+
+
+md-grid-tile {
+    border-style: dashed;
+    border-width: 1px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    
+    img {
+        max-width: 100%;
+    }
+}
