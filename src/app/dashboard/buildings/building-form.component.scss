@@ -2,10 +2,18 @@
   .dialog-example-buttons {
     justify-content: flex-end;
   }
+  .mat-tab-header {
+      margin-bottom: 15px;
+  }
+
 }
 
 .mat-accent#md-checkbox-1 {
     display: table;
+}
+
+.mat-tab-header {
+    margin-bottom: 15px;
 }
 
 .dropzone {
@@ -17,6 +25,7 @@
     width: 90%;
     background-color: #eee;
     border: dotted 5px #aaa;
+    margin-bottom: 20px;
 
     .centered {
         text-align: center;
@@ -27,10 +36,12 @@
 md-grid-tile {
     border-style: dashed;
     border-width: 1px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    
+    height: 100px !important;
+
     img {
         max-width: 100%;
+        &:hover {
+            opacity: .5;
+        }
     }
 }

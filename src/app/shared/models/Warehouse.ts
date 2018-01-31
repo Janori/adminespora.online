@@ -8,6 +8,6 @@ export class Warehouse {
         this.id = obj && obj.id || null;
         this.is_new = obj && obj.is_new || null;
         this.build_surface = obj && obj.build_surface || null;
-        this.building_year = obj && obj.building_date || null;
+        this.building_year = obj && obj.building_year || null;
     }
 }

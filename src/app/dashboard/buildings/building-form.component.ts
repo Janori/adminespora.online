@@ -34,4 +34,15 @@ export class BuildingFormComponent implements OnInit {
             });
         }
     }
+
+    deleteImage(id: number) {
+        if(!confirm('Estás seguro que deseas eliminar esta imagen'))
+            return;
+
+        this._buildingService.destroyImage(id).subscribe(result => {
+            this.data.building.images = this.data.building.images.filter(item => {
+                return item.id != id
+            });
+        });
+    }
 }

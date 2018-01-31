@@ -14,4 +14,9 @@ export class BuildingService extends Service {
                         .map(res => res.json());
     }
 
+    destroyImage(id: number) {
+        return this.http.delete(`${ this.requestUrl}/images/${ id }`, { headers: this.headers(HeaderType.Authorization)})
+                        .map(res => res.json());
+    }
+
 }
