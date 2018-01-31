@@ -6,7 +6,7 @@
                     <md-card-title class="building-title">
                         Inmueble #{{ building.id }}
                         <div class="building-actions">
-                            <!-- <button md-raised-button color="accent" (click)="rentBuilding(building)" *ngIf="building.rent_status == 1">Rentar</button> -->
+                            <button md-raised-button color="accent" (click)="rentBuilding(building)" *ngIf="building.is_rented == false">Rentar</button>
                             <button md-raised-button color="primary" (click)="editBuilding(building)">Editar</button>
                             <button md-raised-button color="warn" (click)="deleteBuilding(building)">Eliminar</button>
                         </div>
@@ -32,7 +32,7 @@
                 </md-card>
             </div>
         </div>
-        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap *ngIf="false">
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap *ngIf="renterCtrl != null">
             <div fxFlex="100">
                 <md-card>
                     <md-card-title>Trámite de arrendamiento</md-card-title>

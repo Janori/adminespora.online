@@ -80,7 +80,7 @@ export class BuildingDetailComponent implements OnInit {
 
         this.watchScreen();
         this.getBuilding();
-        this.getRenters();
+        //this.getRenters();
     }
 
     myfunc(event: Event) {
@@ -169,6 +169,7 @@ export class BuildingDetailComponent implements OnInit {
     }
 
     getRenters = () => {
+
         this.renters = [
         ];
 

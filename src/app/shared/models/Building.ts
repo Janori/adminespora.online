@@ -17,6 +17,7 @@ export class Building {
     public minimum_rent_period: number;
     public deposit_number: number;
     public extra_data: string;
+    public is_rented: boolean;
 
     public images: any = [];
 
@@ -47,6 +48,7 @@ export class Building {
         this.minimum_rent_period = obj && obj.minimum_rent_period || null;
         this.deposit_number = obj && obj.deposit_number || null;
         this.extra_data = obj && obj.extra_data || '';
+        this.is_rented = obj && obj.is_rented || false;
 
         this.land = obj && 'land' in obj ? new Land(obj.land) : new Land();
         this.housing = obj && 'housing' in obj ? new Housing(obj.housing) : new Housing();
