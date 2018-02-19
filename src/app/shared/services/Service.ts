@@ -10,7 +10,8 @@ export class Service implements BasicCrud {
     protected mainUrl: string;
 
     constructor(public _http: Http) {
-        this.mainUrl = 'http://adminespora.janori.com/';
+        //this.mainUrl = 'http://adminespora.janori.com/';
+        this.mainUrl = 'http://localhost:8000/';
     }
 
     getNewtoken(email: string, secret: string) {

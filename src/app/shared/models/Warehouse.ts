@@ -6,7 +6,7 @@ export class Warehouse {
 
     constructor(obj ?: any) {
         this.id = obj && obj.id || null;
-        this.is_new = obj && obj.is_new || null;
+        this.is_new = obj && obj.is_new || false;
         this.build_surface = obj && obj.build_surface || null;
         this.building_year = obj && obj.building_year || null;
     }
