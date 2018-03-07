@@ -1,7 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { StepState, TdMediaService } from '@covalent/core';
-import { Building, Ticket, Customer } from '../../shared/models';
+import { Building, Ticket, Customer, Renter } from '../../shared/models';
 import { Subscription } from 'rxjs/Subscription';
 import { MdDialog, MdSnackBar } from '@angular/material';
 import { BuildingFormComponent } from './building-form.component';
@@ -9,14 +9,14 @@ import { BuildingRentComponent } from './building-rent.component';
 import { CancelTicketDialogComponent } from './cancel-ticket-dialog/cancel-ticket-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components';
 import { FormControl } from '@angular/forms';
-import { BuildingService } from '../../shared/services/building.service';
+import { BuildingService, RentsService, CustomerService } from '../../shared/services';
 import { NgxCarousel } from 'ngx-carousel';
 
 @Component({
     selector: 'app-building-detail',
     templateUrl: './building-detail.component.html',
     styleUrls: ['./building-detail.component.scss'],
-    providers: [ BuildingService ],
+    providers: [ BuildingService, RentsService, CustomerService ],
     encapsulation: ViewEncapsulation.None
 })
 
@@ -26,7 +26,7 @@ export class BuildingDetailComponent implements OnInit {
     public querySubscription: Subscription;
     public renters: Customer[];
     public renterCtrl: FormControl;
-    public filteredRenters: any;
+    public filteredRenters: any[];
 
     public carouselOne: NgxCarousel;
     public carouselTileItems: Array<any>;
@@ -56,7 +56,9 @@ export class BuildingDetailComponent implements OnInit {
         private _mdSnackbar: MdSnackBar,
         private _mediaService: TdMediaService,
         private _ngZone: NgZone,
-        private _buildingService: BuildingService
+        private _buildingService: BuildingService,
+        private _rentsService: RentsService,
+        private _customerService: CustomerService
     ) {
         this.building = new Building();
     }
@@ -80,7 +82,7 @@ export class BuildingDetailComponent implements OnInit {
 
         this.watchScreen();
         this.getBuilding();
-        //this.getRenters();
+        this.getRenters();
     }
 
     myfunc(event: Event) {
@@ -113,6 +115,12 @@ export class BuildingDetailComponent implements OnInit {
 
             this._buildingService.getOne(id).subscribe(result => {
                 this.building = new Building(result.data);
+                if(this.building.is_rented == true){
+                  this.firstStepEnded();
+                  this.stateStep3 = StepState.Complete;
+                  this.activeStep2 = false;
+                  this.activeStep3 = true;
+                }
             });
         });
     }
@@ -170,26 +178,96 @@ export class BuildingDetailComponent implements OnInit {
 
     getRenters = () => {
 
-        this.renters = [
-        ];
+        this._customerService.search('c', null)
+                             .subscribe(res=>{
+          if(!res || res == null) this.renters = [];
+          this.renters = res.data.map(x=> new Customer(x));
+        }, error=>{
+          console.log(error);
+        });
 
+        if(this.renterCtrl || this.renterCtrl != null) return;
         this.renterCtrl = new FormControl();
-        this.filteredRenters = this.renterCtrl.valueChanges
+        this.renterCtrl.valueChanges
           .startWith(null)
-          .map(name => this.filterRenters(name));
+          .debounceTime(300)
+          .map(name => { return this.filterRenters(name)}).subscribe();
     }
 
-    filterRenters = (val: string) => val ? this.renters.filter((r) => new RegExp(val, 'gi').test(r.full_name)) : this.renters;
+    isDownloading = false;
+    downloadFile(){
+      this.isDownloading = true;
+      // let event = new MouseEvent('click', {bubbles: true});
+      // event.stopPropagation();
+      var tabWindowId = window.open('about:blank', '_blank');
+      this._rentsService.downloadContract(this.building.rent.id).subscribe(file=>{
+        this.isDownloading = false;
+        let blob = new Blob([file.arrayBuffer()], { type: 'application/pdf' });
 
-    contractGenerate = () => {
-        this.building.rent.document_url = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
-        this.stateStep1 = StepState.Complete;
-        this.stateStep2 = StepState.Complete;
-        this.disabledStep2 = false;
-        this.disabledStep3 = false;
+        let fileURL = window.URL.createObjectURL(blob);
 
-        this.activeStep1 = false;
-        this.activeStep2 = true;
+        // let link = document.createElement('a');
+        // link.target = tabWindowId;
+        // link.href = fileURL;
+        // link.setAttribute('visibility', 'hidden');
+        // link.click();
+        tabWindowId.location.href = fileURL;
+      }, error=>{
+        this.isDownloading = false;
+        let title = `Contrato no encontrado.`;
+        let msg = 'Puede que el contrato haya sido eliminado manualmente o no exista.'
+        const dialogRef = this._mdDialog.open(ConfirmDialogComponent, {
+            data: {
+                title: title,
+                msg: msg,
+            }
+        });
+      });
+    }
+
+    filterRenters(val: string){
+      console.log(val);
+      if(!val || val == null) return this.renters;
+
+      console.log(this.renters);
+      this.filteredRenters = this.renters.filter(r => { return new RegExp(val, 'gi').test(r.full_name); });
+    }
+
+    //renter:any;
+    contractGenerate() {
+        //this.building.rent.contract_path = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+        console.log('hola que tal :)');
+        // let o = {
+        // 	renter_id:this.building.rent.renter.id,
+        // 	building_id: this.building.id,
+        // 	price: this.building.rent.price,
+        // 	rent_period: this.building.rent.rent_period,
+        // 	start_date: this.building.rent.start_date
+        // uploadFiles
+        // console.log(o);
+        // this._rentsService.init({
+        // 	"renter_id":this.renter.id,
+        // 	"building_id": this.building.id,
+        // 	"price": this.building.rent.price,
+        // 	"rent_period": this.building.rent.rent_period,
+        // 	"start_date": this.building.rent.start_date
+        // }).subscribe(res=>{
+        //   console.log(res);
+        // }, error=>{
+        //   console.error(error);
+        // });
+        //this.firstStepEnded();
+    }
+
+    firstStepEnded(){
+      this.stateStep1 = StepState.Complete;
+      this.stateStep2 = StepState.Complete;
+      this.disabledStep2 = false;
+      this.disabledStep3 = false;
+
+      this.activeStep1 = false;
+      this.activeStep2 = true;
+
     }
 
     uploadFiles = () => {
@@ -202,8 +280,13 @@ export class BuildingDetailComponent implements OnInit {
             }
         });
         dialogRef.afterClosed().subscribe(result => {
-            if(result)
-                this.building.rent.id = 1;
+            if(result){
+              this._rentsService.finalize(this.files).subscribe(res=>{
+                console.log(res);
+              }, error=>{
+                console.log(error);
+              });
+            }
         });
     }
 

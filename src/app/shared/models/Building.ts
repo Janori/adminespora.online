@@ -2,6 +2,7 @@ import { Land } from './Land';
 import { Housing } from './Housing';
 import { Office } from './Office';
 import { Warehouse } from './Warehouse';
+import { Rent } from './Rent';
 
 export class Building {
     public id: number;
@@ -18,12 +19,12 @@ export class Building {
     public deposit_number: number;
     public extra_data: string;
     public is_rented: boolean;
+    public rents:Rent[];
+
+    public rent:Rent;
 
     public images: any = [];
 
-    public rent: any = {
-        document_url: ''
-    };
 
     public kind: string = '';
 
@@ -54,6 +55,10 @@ export class Building {
         this.housing = obj && 'housing' in obj ? new Housing(obj.housing) : new Housing();
         this.office = obj && 'office' in obj ? new Office(obj.office) : new Office();
         this.warehouse = obj && 'warehouse' in obj ? new Warehouse(obj.warehouse) : new Warehouse();
+        this.rents = obj && 'rents' in obj ? (<Array<any>>obj.rents).map(x=>{ return new Rent(x) }) : new Array<Rent>();
+
+        this.rent = this.rents.find(x => {return x.status == 'r'});
+        if(this.rent == undefined) this.rent = new Rent();
 
         if(obj && 'images' in obj && Array.isArray(obj.images)) {
             for(let image of obj.images)

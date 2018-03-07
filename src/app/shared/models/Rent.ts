@@ -7,21 +7,36 @@ export class Rent {
     public renter: Renter;
     public owner_id: number;
     public owner: Owner;
-    public precio_minimo: number;
-    public plazo_minimo: number;
-    public precio_renta: number;
-    public fecha_inicio: string;
-    public document_url: string;
+    public user_id:number;
+    public building_id: number;
+    public rent_period: number;
+    public price: number;
+    public status: string;
+    public start_date: Date;
+    public contract_path: string;
+    public extra_data:number;
+
+    public created_at:Date;
+    public updated_at:Date;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
         this.renter_id = obj && obj.renter_id || null;
         this.owner_id = obj && obj.owner_id || null;
-        this.precio_minimo = obj && obj.precio_minimo || 0;
-        this.plazo_minimo = obj && obj.plazo_minimo || 0;
-        this.precio_renta = obj && obj.precio_renta || 0;
-        this.fecha_inicio = obj && obj.fecha_inicio || '';
-        this.document_url = obj && obj.document_url || '';
+
+        this.user_id = obj && obj.user_id || '';
+        this.building_id = obj && obj.building_id || '';
+        this.rent_period = obj && obj.rent_period || '';
+        this.price = obj && obj.price || '';
+        this.status = obj && obj.status || '';
+        this.start_date = obj && new Date((''+obj.start_date).replace(' ', 'T')) || null;
+        this.contract_path = obj && obj.contract_path || '';
+        this.extra_data = obj && obj.extra_data || '';
+
+        this.created_at = obj && obj.created_at || new Date();
+        this.updated_at = obj && obj.updated_at || new Date();
+
+
 
         this.renter = obj && 'renter' in obj ? new Renter(obj.renter): null;
         this.owner = obj && 'owner' in obj ? new Owner(obj.owner): null;

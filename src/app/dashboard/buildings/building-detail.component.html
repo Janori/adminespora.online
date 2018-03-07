@@ -39,21 +39,25 @@
                     <td-steps #stepper [mode]="isScreenGtSm ? 'horizontal' : 'vertical'">
                         <td-step #step1 label="Información de contrato" sublabel="Captura de datos" [state]="stateStep1" [active]="activeStep1">
                             <md-input-container class="full-width">
-                                <input mdInput placeholder="Arrendador" [mdAutocomplete]="auto" [formControl]="renterCtrl" [(ngModel)]="building.rent.renter_id">
+                                <input mdInput placeholder="Arrendador" [mdAutocomplete]="auto" [formControl]="renterCtrl" [(ngModel)]="building.rent.renter">
                             </md-input-container>
                             <md-autocomplete #auto="mdAutocomplete">
-                                <md-option *ngFor="let renter of filteredRenters | async" [value]="renter.id">
+                                <md-option *ngFor="let renter of filteredRenters" [value]="renter.full_name">
                                 {{ renter.full_name }}
                                 </md-option>
                             </md-autocomplete>
                             <md-input-container class="full-width">
-                                <input mdInput type="number" placeholder="Plazo de renta (meses)" [(ngModel)]="building.rent.plazo_minimo">
+                                <input *ngIf="building.is_rented == false" mdInput type="number" placeholder="Plazo de renta (meses)" [(ngModel)]="building.rent.rent_period">
+                                <input *ngIf="building.is_rented == true" [disabled]="true" mdInput type="number" placeholder="Plazo de renta (meses)" [value]="building.rent.rent_period">
                             </md-input-container>
                             <md-input-container class="full-width">
-                                <input mdInput type="number" placeholder="Precio de renta ($)" [(ngModel)]="building.rent.precio_renta">
+                                <input *ngIf="building.is_rented == false" mdInput type="number" placeholder="Precio de renta ($)" [(ngModel)]="building.rent.price">
+                                <input *ngIf="building.is_rented == true" [disabled]="true" mdInput type="number" placeholder="Precio de renta ($)" [(ngModel)]="building.rent.price">
                             </md-input-container>
                             <md-input-container class="full-width">
-                                <input mdInput type="date" placeholder="Fecha de inicio" [(ngModel)]="building.rent.fecha_inicio">
+                                <input mdInput [mdDatepicker]="picker3" placeholder="Fecha de inicio" [(ngModel)]="building.rent.start_date">
+                                <md-datepicker-toggle mdSuffix [for]="picker3"></md-datepicker-toggle>
+                                <md-datepicker #picker3></md-datepicker>
                             </md-input-container>
                             <ng-template td-step-actions>
                                 <div>
@@ -69,27 +73,34 @@
                             </ng-template>
                         </td-step>
                         <td-step #step3 label="Cierre de trámite" sublabel="Carga de contrato firmado" [state]="stateStep3" [disabled]="disabledStep3" [active]="activeStep3">
-                            <div fxLayout="row">
-                                <md-input-container tdFileDrop
-                                (click)="fileInput.inputElement.click()"
-                                (keyup.enter)="fileInput.inputElement.click()"
-                                (keyup.delete)="fileInput.clear()"
-                                (keyup.backspace)="fileInput.clear()" fxFlex>
-                                <input mdInput
-                                    placeholder="Selecciona o suelta archivos"
-                                    [value]="files?.length ? (files?.length + ' files') : files?.name"
-                                    readonly/>
-                                </md-input-container>
-                                <button md-icon-button *ngIf="files" (click)="fileInput.clear()" (keyup.enter)="fileInput.clear()">
-                                    <md-icon class="icon-color">cancel</md-icon>
-                                </button>
-                                <td-file-input class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" multiple>
-                                    <md-icon>folder</md-icon>
-                                    <span class="text-upper">Buscar...</span>
-                                </td-file-input>
-                                <span>
-                                    <button md-raised-button color="accent" [disabled]="!files" class="text-upper" (click)="uploadFiles()">Enviar</button>
-                                </span>
+                            <div  *ngIf="stateStep3 == 'complete'">
+                              <button md-raised-button (click)="downloadFile()">
+                                <i *ngIf="isDownloading == true" class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                                <md-icon *ngIf="isDownloading == false">cloud_download</md-icon>
+                                <span class="text-upper">Ver documento cargado.</span>
+                              </button>
+                            </div>
+                            <div *ngIf="!(stateStep3 == 'complete')">
+                              <md-input-container tdFileDrop
+                              (click)="fileInput.inputElement.click()"
+                              (keyup.enter)="fileInput.inputElement.click()"
+                              (keyup.delete)="fileInput.clear()"
+                              (keyup.backspace)="fileInput.clear()" fxFlex>
+                              <input mdInput
+                                  placeholder="Selecciona o suelta archivos"
+                                  [value]="files?.length ? (files?.length + ' files') : files?.name"
+                                  readonly/>
+                              </md-input-container>
+                              <button md-icon-button *ngIf="files" (click)="fileInput.clear()" (keyup.enter)="fileInput.clear()">
+                                  <md-icon class="icon-color">cancel</md-icon>
+                              </button>
+                              <td-file-input class="push-left-sm push-right-sm" #fileInput [(ngModel)]="files" multiple>
+                                  <md-icon>folder</md-icon>
+                                  <span class="text-upper">Buscar...</span>
+                              </td-file-input>
+                              <span>
+                                  <button md-raised-button color="accent" [disabled]="!files" class="text-upper" (click)="uploadFiles()">Enviar</button>
+                              </span>
                             </div>
                         </td-step>
                     </td-steps>
