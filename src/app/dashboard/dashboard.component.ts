@@ -127,6 +127,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                         this._mdSnackbar.open('Inmueble añadido con éxito', 'Aceptar', {
                             duration: 2000,
                         });
+                    },error => {
+                      console.log(error);
+                        this._mdSnackbar.open('Ocurrió un error al añadir el inmueble', 'Aceptar', {
+                            duration: 2000,
+                        });
                     });
                 }
             });

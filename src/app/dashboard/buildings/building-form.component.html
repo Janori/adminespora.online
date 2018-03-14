@@ -6,18 +6,30 @@
             <md-checkbox [(ngModel)]="data.building.warehouse.is_new">¿Es nuevo?</md-checkbox>
             <br>
             <md-select placeholder="Tipo de inmbueble" [(ngModel)]="data.building.kind" class="full-width">
-                <md-option value="Casas">Casas</md-option>
-                <md-option value="Departamentos">Departamentos</md-option>
-                <md-option value="Oficinas">Oficinas</md-option>
-                <md-option value="Terrenos">Terrenos</md-option>
-                <md-option value="Edificios">Edificios</md-option>
-                <md-option value="Parques industriales">Parques industriales</md-option>
-                <md-option value="Plantas industriales">Plantas industriales</md-option>
-                <md-option value="Hoteles">Hoteles</md-option>
-                <md-option value="Ranchos">Ranchos</md-option>
-                <md-option value="Haciendas y quintas/Granjas">Haciendas y quintas/Granjas</md-option>
-                <md-option value="Predio rustico">Predio rustico</md-option>
+                <md-option value="c">Casas</md-option>
+                <md-option value="d">Departamentos</md-option>
+                <md-option value="o">Oficinas</md-option>
+                <md-option value="t">Terrenos</md-option>
+                <md-option value="e">Edificios</md-option>
+                <md-option value="pa">Parques industriales</md-option>
+                <md-option value="pl">Plantas industriales</md-option>
+                <md-option value="h">Hoteles</md-option>
+                <md-option value="r">Ranchos</md-option>
+                <md-option value="g">Haciendas y quintas/Granjas</md-option>
+                <md-option value="pr">Predio rustico</md-option>
             </md-select>
+            <br>
+            <br>
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Proveedor" [mdAutocomplete]="provAuto" [(ngModel)]="data.building.provider"
+                       (ngModelChange)="filterProviders($event)">
+            </md-input-container>
+            <md-autocomplete #provAuto="mdAutocomplete" [displayWith]="displayRenter" >
+                <md-option (onSelectionChange)="data.building.provider_id = provider.id" *ngFor="let provider of filteredProviders" [value]="provider">
+                {{ provider.full_name }}
+                </md-option>
+            </md-autocomplete>
+
             <md-input-container class="full-width">
                 <input mdInput placeholder="Dirección" [(ngModel)]="data.building.land.location">
             </md-input-container>

@@ -1,7 +1,8 @@
 import { Component, NgZone, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { StepState, TdMediaService } from '@covalent/core';
-import { Building, Ticket, Customer, Renter } from '../../shared/models';
+import { Building, Ticket, Customer, Renter, Provider } from '../../shared/models';
 import { Subscription } from 'rxjs/Subscription';
 import { MdDialog, MdSnackBar } from '@angular/material';
 import { BuildingFormComponent } from './building-form.component';
@@ -9,14 +10,14 @@ import { BuildingRentComponent } from './building-rent.component';
 import { CancelTicketDialogComponent } from './cancel-ticket-dialog/cancel-ticket-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components';
 import { FormControl } from '@angular/forms';
-import { BuildingService, RentsService, CustomerService } from '../../shared/services';
+import { BuildingService, RentsService, CustomerService, TicketsService } from '../../shared/services';
 import { NgxCarousel } from 'ngx-carousel';
 
 @Component({
     selector: 'app-building-detail',
     templateUrl: './building-detail.component.html',
     styleUrls: ['./building-detail.component.scss'],
-    providers: [ BuildingService, RentsService, CustomerService ],
+    providers: [ BuildingService, RentsService, CustomerService, TicketsService ],
     encapsulation: ViewEncapsulation.None
 })
 
@@ -25,8 +26,12 @@ export class BuildingDetailComponent implements OnInit {
     public isScreenGtSm: boolean = false;
     public querySubscription: Subscription;
     public renters: Customer[];
+    public providers: Provider[];
     public renterCtrl: FormControl;
+    public requesterCtrl: FormControl;
+    public providerCtrl: FormControl;
     public filteredRenters: any[];
+    public filteredProviders: any[];
 
     public carouselOne: NgxCarousel;
     public carouselTileItems: Array<any>;
@@ -58,7 +63,8 @@ export class BuildingDetailComponent implements OnInit {
         private _ngZone: NgZone,
         private _buildingService: BuildingService,
         private _rentsService: RentsService,
-        private _customerService: CustomerService
+        private _customerService: CustomerService,
+        private _ticketsService: TicketsService,
     ) {
         this.building = new Building();
     }
@@ -83,6 +89,10 @@ export class BuildingDetailComponent implements OnInit {
         this.watchScreen();
         this.getBuilding();
         this.getRenters();
+    }
+
+    displayRenter(val: any) {
+      return val ? val.full_name : val;
     }
 
     myfunc(event: Event) {
@@ -120,9 +130,25 @@ export class BuildingDetailComponent implements OnInit {
                   this.stateStep3 = StepState.Complete;
                   this.activeStep2 = false;
                   this.activeStep3 = true;
+                }else if(this.building.rent && this.building.rent.status == 'p'){
+                  this.firstStepEnded();
                 }
+                this.setTickets();
+
             });
         });
+    }
+
+    setTickets(){
+      this.dynamicTabs = [];
+      if(!this.building.tickets || this.building.tickets == null) return;
+      for(let t of this.building.tickets){
+        this.dynamicTabs.push({
+            label: 'Ticket # ' + t.id,
+            data: t,
+            state: this.checkTicketStatus(t)
+        });
+      }
     }
 
     editBuilding = (building?: Building) => {
@@ -176,22 +202,55 @@ export class BuildingDetailComponent implements OnInit {
         this.getRenters();
     }
 
-    getRenters = () => {
-
+    getRenters(){
+        this.renters = [];
         this._customerService.search('c', null)
                              .subscribe(res=>{
-          if(!res || res == null) this.renters = [];
-          this.renters = res.data.map(x=> new Customer(x));
+          if(res && res != null)
+            this.renters = this.renters.concat(res.data.map(x=> new Customer(x)));
         }, error=>{
-          console.log(error);
+          console.error(error);
         });
 
-        if(this.renterCtrl || this.renterCtrl != null) return;
-        this.renterCtrl = new FormControl();
-        this.renterCtrl.valueChanges
-          .startWith(null)
-          .debounceTime(300)
-          .map(name => { return this.filterRenters(name)}).subscribe();
+        this._customerService.search('o', null)
+                             .subscribe(res=>{
+          if(res && res != null)
+            this.renters = this.renters.concat(res.data.map(x=> new Customer(x)));
+        }, error=>{
+          console.error(error);
+        });
+
+        this._customerService.search('p', null)
+                             .subscribe(res=>{
+          if(res && res != null)
+            this.providers = res.data.map(x=> new Provider(x));
+          else this.providers = [];
+        }, error=>{
+          console.error(error);
+        });
+
+        if(!(this.renterCtrl || this.renterCtrl != null)){
+          this.renterCtrl = new FormControl();
+          this.renterCtrl.valueChanges
+            .startWith(null)
+            .debounceTime(300)
+            .map(name => { return this.filterRenters(name)}).subscribe();
+        }
+        if(!(this.requesterCtrl || this.requesterCtrl != null)){
+          this.requesterCtrl = new FormControl();
+          this.requesterCtrl.valueChanges
+            .startWith(null)
+            .debounceTime(300)
+            .map(name => { return this.filterRenters(name)}).subscribe();
+        }
+        if(!(this.providerCtrl || this.providerCtrl != null)){
+          this.providerCtrl = new FormControl();
+          this.providerCtrl.valueChanges
+            .startWith(null)
+            .debounceTime(300)
+            .map(name => { return this.filterProviders(name)}).subscribe();
+        }
+
     }
 
     isDownloading = false;
@@ -226,37 +285,57 @@ export class BuildingDetailComponent implements OnInit {
     }
 
     filterRenters(val: string){
-      console.log(val);
-      if(!val || val == null) return this.renters;
-
-      console.log(this.renters);
-      this.filteredRenters = this.renters.filter(r => { return new RegExp(val, 'gi').test(r.full_name); });
+      if(!val || val == null) this.filteredRenters = this.renters;
+      if(!this.filteredRenters || this.renters == null) this.filteredRenters = this.renters;
+      else this.filteredRenters = this.renters.filter(r => { return new RegExp(val, 'gi').test(r.full_name); });
+    }
+    filterProviders(val: string){
+      console.log('filtrando')
+      if(!val || val == null) this.filteredProviders = this.providers;
+      if(!this.filteredProviders || this.providers == null) this.filteredProviders = this.providers;
+      else this.filteredProviders = this.providers.filter(r => { return new RegExp(val, 'gi').test(r.full_name); });
     }
 
     //renter:any;
     contractGenerate() {
         //this.building.rent.contract_path = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
-        console.log('hola que tal :)');
-        // let o = {
-        // 	renter_id:this.building.rent.renter.id,
-        // 	building_id: this.building.id,
-        // 	price: this.building.rent.price,
-        // 	rent_period: this.building.rent.rent_period,
-        // 	start_date: this.building.rent.start_date
-        // uploadFiles
-        // console.log(o);
-        // this._rentsService.init({
-        // 	"renter_id":this.renter.id,
-        // 	"building_id": this.building.id,
-        // 	"price": this.building.rent.price,
-        // 	"rent_period": this.building.rent.rent_period,
-        // 	"start_date": this.building.rent.start_date
-        // }).subscribe(res=>{
-        //   console.log(res);
-        // }, error=>{
-        //   console.error(error);
-        // });
-        //this.firstStepEnded();
+        //console.log('hola que tal :)');
+
+        console.log(this.building);
+        let o = {
+        	renter_id:this.building.rent.renter.id,
+        	building_id: this.building.id,
+        	price: this.building.rent.price,
+        	rent_period: this.building.rent.rent_period,
+        	start_date: (new DatePipe('es-ES').transform(this.building.rent.start_date, 'yyyy-MM-ddT00:00:00.000'))
+        }
+        this._rentsService.init(o).subscribe(res=>{
+          this._mdSnackbar.open('Datos guardados correctamente.', 'ok');
+          //console.log(res);
+        }, error=>{
+          this._mdSnackbar.open('Ocurrió un error al guardar los datos.', 'ok');
+          console.error(error);
+        });
+        this.firstStepEnded();
+    }
+
+    checkTicketStatus(ticket:Ticket){
+      if(ticket == null){
+        let s = new typeState();
+        s.active = true;
+        s.disabled = false;
+        return [s,new typeState(),new typeState(),new typeState()];
+      }
+      let active = ticket.getActiveStep() - 1;
+      var state:typeState[] = [];
+      console.log(active);
+      for(let i of [0,1,2,3]){
+        state[i] = new typeState();
+        if(i < active) state[i].state = StepState.Complete;
+        state[i].active = (active == i);
+        state[i].disabled = i > active;
+      }
+      return state;
     }
 
     firstStepEnded(){
@@ -281,25 +360,24 @@ export class BuildingDetailComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             if(result){
-              this._rentsService.finalize(this.files).subscribe(res=>{
-                console.log(res);
+              this._rentsService.finalize(this.building.rent.id, this.files).subscribe(res=>{
+                this._mdSnackbar.open('Renta finalizada correctamente.','ok');
+                //console.log(res);
               }, error=>{
+                this._mdSnackbar.open('Ocurrió un error al finalizar la renta.','ok');
                 console.log(error);
               });
             }
         });
     }
 
-    addTicket = () => {
-        let ticket_id = Math.floor((Math.random() * 1000) + 1);
-        this.dynamicTabs.push({
-            label: 'Ticket #' + ticket_id,
-            data: new Ticket({
-                id: ticket_id
-            })
-        });
-
-        this.activeTabIndex = this.dynamicTabs.length - 1;
+    addTicket(){
+      this.dynamicTabs.push({
+          label: 'Ticket # ?',
+          data: new Ticket(),
+          state: this.checkTicketStatus(null)
+      });
+      this.activeTabIndex = this.dynamicTabs.length - 1;
     }
 
     goToStep = (actualStep: any, nextStep: any) => {
@@ -308,31 +386,68 @@ export class BuildingDetailComponent implements OnInit {
         nextStep.active         = true;
     }
 
-    finishTicket = (index: number) => {
+    finishTicket = (index: number, finalized:boolean = null) => {
+        let data = this.dynamicTabs[index].data;
         const dialogRef = this._mdDialog.open(CancelTicketDialogComponent, {
-            data: {
-                ticket: this.dynamicTabs[index]
-            }
+          data: {
+            title: 'Por favor, ingresa un comentario antes de finalizar el ticket.',
+            ticket: data
+          }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          if(result && result == true){
+            console.log(data);
+            this._ticketsService.closeTicket(data.id, data.extra, finalized ? 'f' : null).subscribe(res=>{
+              this._mdSnackbar.open('Ticket finalizado correctamente', 'Aceptar', {
+                duration: 2000,
+              });
+              this.dynamicTabs.splice(index, 1);
+            }, error=>{
+              console.error(error);
+              this._mdSnackbar.open('Ocurrió un error al finalizar el ticket', 'Aceptar', {
+                duration: 2000,
+              });
+            });
+          }
         });
     }
 
     cancelarTicket = (index: number) => {
-        const dialogRef = this._mdDialog.open(CancelTicketDialogComponent, {
-            data: {
-                ticket: this.dynamicTabs[index].data
-            }
-        });
+      let data = this.dynamicTabs[index].data;
+      const dialogRef = this._mdDialog.open(CancelTicketDialogComponent, {
+        data: {
+          title: 'Por favor, escribe las razones por las cuales estás cancelando este ticket.',
+          ticket: data
+        }
+      });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if(result == true) {
-                this._mdSnackbar.open('Ticket cancelado correctamente', 'Aceptar', {
-                    duration: 2000,
-                });
-
-                this.dynamicTabs.splice(index, 1);
-
-                console.log(this.dynamicTabs);
-            }
-        });
+      dialogRef.afterClosed().subscribe(result => {
+        if(result && result == true){
+          console.log(data);
+          this._ticketsService.closeTicket(data.id, data.extra, 'x').subscribe(res=>{
+            this._mdSnackbar.open('Ticket cancelado correctamente', 'Aceptar', {
+              duration: 2000,
+            });
+            this.dynamicTabs.splice(index, 1);
+          }, error=>{
+            console.error(error);
+            this._mdSnackbar.open('Ocurrió un error al cancelar el ticket', 'Aceptar', {
+              duration: 2000,
+            });
+          });
+        }
+      });
     }
+}
+
+class typeState{
+  state:any;
+  active:any;
+  disabled:any;
+
+  constructor(){
+    this.active= false;
+    this.disabled= true;
+  }
 }

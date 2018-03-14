@@ -1,7 +1,7 @@
 <h4 md-dialog-title>Cancelar Ticket #{{ data.ticket.id }} </h4>
-<div md-dialog-content>Por favor, escribe las razones por las cuales estás cancelando este ticket.</div>
+<div md-dialog-content>{{data.title}}</div>
 <md-input-container class="full-width">
-    <textarea mdInput placeholder="Motivos..." rows="10"></textarea>
+    <textarea mdInput placeholder="Motivos..." [(ngModel)]="data.ticket.extra" rows="10"></textarea>
 </md-input-container>
 <div md-dialog-actions class="dialog-buttons">
   <button md-button color="warn" (click)="dialogRef.close(false)">Cancelar</button>
