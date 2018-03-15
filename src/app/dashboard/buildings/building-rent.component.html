@@ -9,16 +9,16 @@
         </md-option>
     </md-autocomplete>
     <md-input-container class="full-width">
-        <input mdInput type="number" placeholder="Plazo de renta (meses)" [(ngModel)]="rent.plazo_minimo">
+        <input mdInput type="number" placeholder="Plazo de renta (meses)" [(ngModel)]="rent.rent_period">
     </md-input-container>
     <md-input-container class="full-width">
-        <input mdInput type="number" placeholder="Precio de renta ($)" [(ngModel)]="rent.precio_renta">
+        <input mdInput type="number" placeholder="Precio de renta ($)" [(ngModel)]="rent.price">
     </md-input-container>
     <md-input-container class="full-width">
-        <input mdInput type="date" placeholder="Fecha de inicio" [(ngModel)]="rent.fecha_inicio">
+        <input mdInput type="date" placeholder="Fecha de inicio" [(ngModel)]="rent.start_date">
     </md-input-container>
 </div>
 <div md-dialog-actions class="dialog-buttons">
     <button md-button (click)="dialogRef.close(false)" color="warn">Cancelar</button>
-    <button md-button (click)="dialogRef.close(renter)" color="primary">Aceptar</button>
+    <button md-button (click)="dialogRef.close(renters)" color="primary">Aceptar</button>
 </div>

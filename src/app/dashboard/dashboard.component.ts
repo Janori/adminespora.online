@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     _boxedLayout = false;
     // Data for messages at popup
 
-    public user: object = {
+    public user: any = {
         name: 'Administrador Espora',
         kind: 'Administrador',
     };
