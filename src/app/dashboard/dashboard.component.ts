@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     _boxedLayout = false;
     // Data for messages at popup
 
-    public user: object = {
+    public user: any = {
         name: 'Administrador Espora',
         kind: 'Administrador',
     };
@@ -125,6 +125,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                 if(result != false) {
                     this._buildingService.create(result).subscribe(result => {
                         this._mdSnackbar.open('Inmueble añadido con éxito', 'Aceptar', {
+                            duration: 2000,
+                        });
+                    },error => {
+                      console.log(error);
+                        this._mdSnackbar.open('Ocurrió un error al añadir el inmueble', 'Aceptar', {
                             duration: 2000,
                         });
                     });

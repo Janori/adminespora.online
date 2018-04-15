@@ -6,3 +6,4 @@ export * from './building.service';
 export * from './customer.service';
 export * from './user.service';
 export * from './rents.service';
+export * from './tickets.service';

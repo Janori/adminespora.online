@@ -23,10 +23,10 @@ export class RentsService extends Service {
                       { headers: this.headers(HeaderType.Authorization, HeaderType.Json) });
     }
 
-    public finalize(pdf:File){
+    public finalize(id:number,pdf:File){
       let data = new FormData();
       data.append('pdf', pdf, pdf.name);
-      return this.http.post(`${this.requestUrl}/init`,
+      return this.http.post(`${this.requestUrl}/${id}/complete`,
                             data,
                             { headers: this.headers(HeaderType.Authorization) });
     }

@@ -17,7 +17,7 @@
               [data]="filteredData"
               [columns]="columns"
               [sortable]="true"
-              [sortBy]="id"
+              [sortBy]="'id'"
               [sortOrder]="sortOrder"
               (sortChange)="sort($event)">
               <ng-template tdDataTableTemplate="actions" let-value="value" let-row="row">

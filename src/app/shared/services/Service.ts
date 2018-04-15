@@ -10,8 +10,8 @@ export class Service implements BasicCrud {
     protected mainUrl: string;
 
     constructor(public _http: Http) {
-        //this.mainUrl = 'http://adminespora.janori.com/';
-        this.mainUrl = 'http://localhost:8000/';
+        this.mainUrl = 'http://adminespora.janori.com/';
+        //ng this.mainUrl = 'http://localhost:8000/';
     }
 
     getNewtoken(email: string, secret: string) {
@@ -85,6 +85,7 @@ export class Service implements BasicCrud {
     }
 
     create = (data: any) => {
+      console.log(data);
         return this._http.post(this.requestUrl, data, { headers: this.headers(HeaderType.Authorization, HeaderType.Json)})
                          .map(res => res.json());
     }

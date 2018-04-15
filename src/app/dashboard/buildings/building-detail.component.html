@@ -41,8 +41,8 @@
                             <md-input-container class="full-width">
                                 <input mdInput placeholder="Arrendador" [mdAutocomplete]="auto" [formControl]="renterCtrl" [(ngModel)]="building.rent.renter">
                             </md-input-container>
-                            <md-autocomplete #auto="mdAutocomplete">
-                                <md-option *ngFor="let renter of filteredRenters" [value]="renter.full_name">
+                            <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayRenter">
+                                <md-option *ngFor="let renter of filteredRenters" [value]="renter">
                                 {{ renter.full_name }}
                                 </md-option>
                             </md-autocomplete>
@@ -126,59 +126,80 @@
                     </md-card-title>
                     <div *ngIf="dynamicTabs.length != 0">
                         <md-tab-group class="tab-group" dynamicHeight [(selectedIndex)]="activeTabIndex">
-                            <md-tab *ngFor="let tab of dynamicTabs; let i = index" #tab>
+                            <md-tab *ngFor="let tab of dynamicTabs; let i = index">
                                 <ng-template mdTabLabel>{{ tab.label }}</ng-template>
                                 <td-steps [mode]="isScreenGtSm ? 'horizontal' : 'vertical'">
-                                    <td-step #step1 label="Datos del solicitante" sublabel="Identificación del solicitante" active="1">
+                                    <td-step #stepT1 label="Datos del solicitante" sublabel="Identificación del solicitante"
+                                            [state]="tab.state[0].state" [disabled]="tab.state[0].disabled" [active]="tab.state[0].active">
                                         <md-input-container class="full-width">
-                                            <input mdInput placeholder="Solicitante" [mdAutocomplete]="auto" [formControl]="renterCtrl">
+                                            <input mdInput placeholder="Solicitante" [mdAutocomplete]="reqAuto" [formControl]="requesterCtrl" [(ngModel)]="tab.data.requester">
                                         </md-input-container>
-                                        <md-autocomplete #auto="mdAutocomplete">
-                                            <md-option *ngFor="let renter of filteredRenters | async" [value]="renter.id">
-                                            {{ renter.full_name }}
+                                        <md-autocomplete #reqAuto="mdAutocomplete" [displayWith]="displayRenter">
+                                            <md-option *ngFor="let requester of filteredRenters" [value]="requester">
+                                            {{ requester.full_name }}
                                             </md-option>
                                         </md-autocomplete>
                                         <md-input-container class="full-width">
-                                            <textarea mdInput placeholder="Detalles"></textarea>
+                                            <textarea mdInput [(ngModel)]="tab.data.data" placeholder="Detalles"></textarea>
                                         </md-input-container>
                                         <div class="stepper-buttons">
-                                            <button md-raised-button color="primary" (click)="goToStep(step1, step2)">Iniciar cotización</button>
+                                            <button md-raised-button color="primary" (click)="goToStep(stepT1, stepT2)">Iniciar cotización</button>
                                         </div>
                                     </td-step>
-                                    <td-step #step2 label="Cotización" sublabel="Consulta con proveedores" disabled="true">
+                                    <td-step #stepT2 label="Cotización" sublabel="Consulta con proveedores" disabled="true"
+                                            [state]="tab.state[1].state" [disabled]="tab.state[1].disabled" [active]="tab.state[1].active">
                                         <md-input-container class="full-width">
-                                            <input mdInput placeholder="Proveedor" [mdAutocomplete]="auto" [formControl]="renterCtrl">
+                                            <input mdInput placeholder="Proveedor" [mdAutocomplete]="provAuto" [(ngModel)]="tab.data.provider"
+                                                   (ngModelChange)="filterProviders($event)">
                                         </md-input-container>
-                                        <md-autocomplete #auto="mdAutocomplete">
-                                            <md-option *ngFor="let renter of filteredRenters | async" [value]="renter.id">
-                                            {{ renter.full_name }}
+                                        <md-autocomplete #provAuto="mdAutocomplete" [displayWith]="displayRenter" >
+                                            <md-option *ngFor="let provider of filteredProviders" [value]="provider">
+                                            {{ provider.full_name }}
                                             </md-option>
                                         </md-autocomplete>
                                         <md-input-container class="full-width">
-                                            <input type="number" mdInput placeholder="Cotización">
+                                            <input type="number" mdInput placeholder="Cotización" [(ngModel)]="tab.data.provider_cost">
                                         </md-input-container>
                                         <md-input-container class="full-width">
+                                            <input type="number" mdInput placeholder="Precio final" [(ngModel)]="tab.data.price">
+                                        </md-input-container>
+                                        <md-input-container *ngIf="!tab.data.estimated_date" class="full-width">
                                             <input type="number" mdInput placeholder="Tiempo estimado (semanas)">
                                         </md-input-container>
+                                        <span class="full-width" *ngIf="tab.data.estimated_date"><b>Fecha estimada de finalización:</b> {{ tab.data.estimated_date|date:'yyyy-MM-dd' }}</span>
+                                        <br/>
+                                        <br/>
                                         <div class="stepper-buttons">
                                             <button md-raised-button color="warn" (click)="cancelarTicket(i)">Cancelar ticket</button>
-                                            <button md-raised-button color="primary" (click)="goToStep(step2, step3)">Enviar cotización</button>
+                                            <button md-raised-button color="primary" (click)="goToStep(stepT2, stepT3)">Enviar cotización</button>
                                         </div>
                                     </td-step>
-                                    <td-step #step3 label="Contaco a proveedor" sublabel="lorem ipsum" disabled="true">
-                                        La cotización ha sido aceptada por el cliente.
+                                    <td-step #stepT3 label="Contacto a proveedor" disabled="true"
+                                            [state]="tab.state[2].state" [disabled]="tab.state[2].disabled" [active]="tab.state[2].active">
+                                            <br>
+                                            <div *ngIf="tab.data.status != 'r'">
+                                              La cotización ha sido aceptada por el cliente.
+                                            </div>
+                                            <div *ngIf="tab.data.status == 'r'">
+                                              La cotización ha sido rechazada por el cliente.
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <br>
                                         <div class="stepper-buttons">
-                                            <button md-raised-button color="warn" (click)="cancelarTicket(i)">Cancelar ticket</button>
-                                            <button md-raised-button color="primary" (click)="goToStep(step3, step4)">Iniciar proceso</button>
+                                            <button *ngIf="tab.data.status == 'r'" md-raised-button color="warn" (click)="finishTicket(i)">Cerrar ticket</button>
+                                            <button *ngIf="tab.data.status == 'v'" md-raised-button color="warn" (click)="cancelarTicket(i)">Cancelar ticket</button>
+                                            <button *ngIf="tab.data.status == 'v'" md-raised-button color="primary" (click)="goToStep(stepT3, stepT4)">Iniciar proceso</button>
                                         </div>
                                     </td-step>
-                                    <td-step #step4 label="Estado del ticket" sublabel="Cambiar el estado del mantenimiento" disabled="true">
+                                    <td-step #stepT4 label="Estado del ticket" sublabel="Cambiar el estado del mantenimiento"
+                                            [state]="tab.state[3].state" [disabled]="tab.state[3].disabled || tab.data.status == 'r'" [active]="tab.state[3].active">
                                         <md-input-container class="full-width">
-                                            <textarea mdInput placeholder="Observaciones"></textarea>
+                                            <textarea mdInput placeholder="Observaciones" [(ngModel)]="tab.data.extra"></textarea>
                                         </md-input-container>
                                         <div class="stepper-buttons">
                                             <button md-raised-button color="warn" (click)="cancelarTicket(i)">Cancelar ticket</button>
-                                            <button md-raised-button color="primary" (click)="finishTicket(i)">Cerrar ticket</button>
+                                            <button md-raised-button color="primary" (click)="finishTicket(i, 'f')">Cerrar ticket</button>
                                         </div>
                                     </td-step>
                                 </td-steps>
