@@ -84,6 +84,7 @@ export class CustomersComponent implements OnInit {
       this._customerService.getAll().subscribe(result => {
           this.data = [];
 
+          result.data = result.data.filter(customer => customer.kind == this.kind);
           let customer = result.data;
               customer.forEach(customer => this.data.push(new Customer(customer)));
 

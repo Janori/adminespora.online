@@ -108,7 +108,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             dialogRef.afterClosed().subscribe(result => {
                 if(result != false) {
                     this._userService.create(result).subscribe(result => {
-                        this._mdSnackbar.open('no', 'Aceptar', {
+                        this._mdSnackbar.open('Usuario añadido con éxito', 'Aceptar', {
                             duration: 2000,
                         });
                     });
@@ -146,7 +146,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                     kind = Customer.KIND.RENTER;
                     break;
                 case 'add_provider':
-                    kind = Customer.KIND.RENTER;
+                    kind = Customer.KIND.PROVIDER;
                     break;
             }
 
@@ -163,7 +163,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                 if(result != false) {
                     this._customerService.create(result).subscribe(result => {
                         if(result.status) {
-                            this._mdSnackbar.open(result.msg, 'Aceptar', {
+                            this._mdSnackbar.open('Registro añadido con éxito', 'Aceptar', {
                                 duration: 2000,
                             });
                         }
