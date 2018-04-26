@@ -23,9 +23,10 @@ export class RentsService extends Service {
                       { headers: this.headers(HeaderType.Authorization, HeaderType.Json) });
     }
 
-    public finalize(id:number,pdf:File){
+    public finalize(id:number,pdf:File, isFacturable:boolean){
       let data = new FormData();
       data.append('pdf', pdf, pdf.name);
+      data.append('isFacturable', ''+isFacturable);
       return this.http.post(`${this.requestUrl}/${id}/complete`,
                             data,
                             { headers: this.headers(HeaderType.Authorization) });

@@ -22,6 +22,7 @@ export class Building {
     public deposit_number: number;
     public extra_data: string;
     public is_rented: boolean;
+    public facturable: boolean;
     public rents:Rent[];
     public tickets:Ticket[];
 
@@ -54,6 +55,7 @@ export class Building {
         this.deposit_number = obj && obj.deposit_number || null;
         this.extra_data = obj && obj.extra_data || '';
         this.is_rented = obj && obj.is_rented || false;
+        this.facturable = obj && obj.facturable || false;
 
         this.kind = obj && obj.kind || 'x';
 
@@ -100,6 +102,8 @@ class Ticket {
     public extra: string;
     public status: string;
     public request_hash: string;
+    public cadastral_key: string;
+    public facturable:boolean;
 
     public created_at: Date;
     public updated_at: Date;
@@ -148,6 +152,8 @@ class Ticket {
         this.extra = obj && obj.extra || null;
         this.status = obj && obj.status || null;
         this.request_hash = obj && obj.request_hash || null;
+        this.cadastral_key = obj && obj.cadastral_key || null;
+        this.facturable = obj && obj.facturable || false;
 
         this.created_at = obj && obj.created_at || null;
         this.updated_at = obj && obj.updated_at || null;

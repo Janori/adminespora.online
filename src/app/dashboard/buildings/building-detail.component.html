@@ -6,7 +6,7 @@
                     <md-card-title class="building-title">
                         Inmueble #{{ building.id }}
                         <div class="building-actions">
-                            <button md-raised-button color="accent" (click)="rentBuilding(building)" *ngIf="building.is_rented == false">Rentar</button>
+                            <!-- <button md-raised-button color="accent" (click)="rentBuilding(building)" *ngIf="building.is_rented == false">Rentar</button> -->
                             <button md-raised-button color="primary" (click)="editBuilding(building)">Editar</button>
                             <button md-raised-button color="warn" (click)="deleteBuilding(building)">Eliminar</button>
                         </div>
@@ -73,6 +73,8 @@
                             </ng-template>
                         </td-step>
                         <td-step #step3 label="Cierre de trámite" sublabel="Carga de contrato firmado" [state]="stateStep3" [disabled]="disabledStep3" [active]="activeStep3">
+
+                            <md-checkbox [(ngModel)]="isRentFacturable">¿Facturar?</md-checkbox>
                             <div  *ngIf="stateStep3 == 'complete'">
                               <button md-raised-button (click)="downloadFile()">
                                 <i *ngIf="isDownloading == true" class="fa fa-spinner fa-spin" aria-hidden="true"></i>
@@ -99,7 +101,7 @@
                                   <span class="text-upper">Buscar...</span>
                               </td-file-input>
                               <span>
-                                  <button md-raised-button color="accent" [disabled]="!files" class="text-upper" (click)="uploadFiles()">Enviar</button>
+                                  <button md-raised-button color="accent" [disabled]="!files" class="text-upper" (click)="uploadFiles(isRentFacturable)">Enviar</button>
                               </span>
                             </div>
                         </td-step>
@@ -142,8 +144,10 @@
                                         <md-input-container class="full-width">
                                             <textarea mdInput [(ngModel)]="tab.data.data" placeholder="Detalles"></textarea>
                                         </md-input-container>
+
+                                        <md-checkbox [(ngModel)]="tab.data.facturable">¿Facturar?</md-checkbox>
                                         <div class="stepper-buttons">
-                                            <button md-raised-button color="primary" (click)="goToStep(stepT1, stepT2)">Iniciar cotización</button>
+                                            <button md-raised-button color="primary" (click)="startTicket(stepT1, stepT2, tab.data)">Iniciar cotización</button>
                                         </div>
                                     </td-step>
                                     <td-step #stepT2 label="Cotización" sublabel="Consulta con proveedores" disabled="true"
@@ -164,24 +168,24 @@
                                             <input type="number" mdInput placeholder="Precio final" [(ngModel)]="tab.data.price">
                                         </md-input-container>
                                         <md-input-container *ngIf="!tab.data.estimated_date" class="full-width">
-                                            <input type="number" mdInput placeholder="Tiempo estimado (semanas)">
+                                            <input type="number" mdInput [(ngModel)]="tab.data.estimated_weeks" placeholder="Tiempo estimado (semanas)">
                                         </md-input-container>
                                         <span class="full-width" *ngIf="tab.data.estimated_date"><b>Fecha estimada de finalización:</b> {{ tab.data.estimated_date|date:'yyyy-MM-dd' }}</span>
                                         <br/>
                                         <br/>
                                         <div class="stepper-buttons">
                                             <button md-raised-button color="warn" (click)="cancelarTicket(i)">Cancelar ticket</button>
-                                            <button md-raised-button color="primary" (click)="goToStep(stepT2, stepT3)">Enviar cotización</button>
+                                            <button md-raised-button color="primary" (click)="sendTicket(stepT2, stepT3, tab.data)">Enviar cotización</button>
                                         </div>
                                     </td-step>
                                     <td-step #stepT3 label="Contacto a proveedor" disabled="true"
                                             [state]="tab.state[2].state" [disabled]="tab.state[2].disabled" [active]="tab.state[2].active">
                                             <br>
-                                            <div *ngIf="tab.data.status != 'r'">
-                                              La cotización ha sido aceptada por el cliente.
-                                            </div>
-                                            <div *ngIf="tab.data.status == 'r'">
-                                              La cotización ha sido rechazada por el cliente.
+                                            <div [ngSwitch]="tab.data.status">
+                                              <div *ngSwitchCase="'r'">La cotización ha sido rechazada por el cliente.</div>
+                                              <div *ngSwitchCase="'c'">Esperando respuesta por parte del cliente.</div>
+                                              <div *ngSwitchCase="'v'">La cotización ha sido aceptada por el cliente.</div>
+                                              <div *ngSwitchDefault>La cotización ha sido aceptada por el cliente</div>
                                             </div>
                                             <br>
                                             <br>

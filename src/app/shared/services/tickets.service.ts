@@ -11,11 +11,12 @@ export class TicketsService extends Service {
       super(http);
   }
 
-  public startTicket(data:string, requesterId:number, buildingId:number){
+  public startTicket(data:string, requesterId:number, buildingId:number, facturable:boolean){
     let d = {
     	data: data,
     	requester_id: requesterId,
-    	building_id: buildingId
+    	building_id: buildingId,
+      facturable: facturable
     }
 
     return this.http.post(`${this.requestUrl}/open`, d,
@@ -23,14 +24,13 @@ export class TicketsService extends Service {
          .map(res=>res.json());
   }
 
-  public quoteTicket(ticketId: number, providerId:string, cost:number, price:number, estimated_weeks:number){
+  public quoteTicket(ticketId: number, providerId:string, cost:number, price:number, estimated_weeks?:number){
     let d = {
     	provider_id: providerId,
-    	provider_cost: cost,
+    	provider_cost: +cost,
     	price: price,
-    	estimated_date: estimated_weeks
+    	estimated_date: estimated_weeks ? estimated_weeks : 'null'
     }
-
     return this.http.post(`${this.requestUrl}/${ticketId}/quote`, d,
                      { headers: this.headers(HeaderType.Authorization, HeaderType.Json) })
          .map(res=>res.json());

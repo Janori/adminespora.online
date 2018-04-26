@@ -141,6 +141,7 @@ export class BuildingDetailComponent implements OnInit {
 
     setTickets(){
       this.dynamicTabs = [];
+      console.log(this.building.tickets);
       if(!this.building.tickets || this.building.tickets == null) return;
       for(let t of this.building.tickets){
         this.dynamicTabs.push({
@@ -349,7 +350,7 @@ export class BuildingDetailComponent implements OnInit {
 
     }
 
-    uploadFiles = () => {
+    uploadFiles = (isFacturable: boolean) => {
         let title = `El contrato de arrendamiento será completado`;
         let msg = '¿Estás seguro que el archivo de contrato es correcto?'
         const dialogRef = this._mdDialog.open(ConfirmDialogComponent, {
@@ -360,7 +361,7 @@ export class BuildingDetailComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             if(result){
-              this._rentsService.finalize(this.building.rent.id, this.files).subscribe(res=>{
+              this._rentsService.finalize(this.building.rent.id, this.files, isFacturable).subscribe(res=>{
                 this._mdSnackbar.open('Renta finalizada correctamente.','ok');
                 //console.log(res);
               }, error=>{
@@ -384,6 +385,37 @@ export class BuildingDetailComponent implements OnInit {
         actualStep.state        = StepState.Complete;
         nextStep.disabled       = false;
         nextStep.active         = true;
+    }
+
+    startTicket(t1, t2, data){
+      this.goToStep(t1, t2);
+      this._ticketsService.startTicket(data.data, data.requester.id, this.building.id, data.facturable).subscribe(x=>{
+        console.log(x);
+        data.id = x.data.id;
+        this._mdSnackbar.open('Ticket iniciado correctamente', 'Aceptar', {
+          duration: 2000,
+        });
+      }, error=>{
+        console.error(error);
+        this._mdSnackbar.open('Ocurrió un error al iniciar este ticket', 'Aceptar', {
+          duration: 2000,
+        });
+      });
+    }
+
+    sendTicket(t1, t2, data){
+      console.log(data);
+      this.goToStep(t1, t2);
+      this._ticketsService.quoteTicket(data.id, data.provider.id, data.provider_cost, data.price, data.estimated_weeks).subscribe(x=>{
+        this._mdSnackbar.open('Cotización enviada correctamente', 'Aceptar', {
+          duration: 2000,
+        });
+      }, error=>{
+        console.error(error);
+        this._mdSnackbar.open('Ocurrió un error al enviar este ticket', 'Aceptar', {
+          duration: 2000,
+        });
+      })
     }
 
     finishTicket = (index: number, finalized:boolean = null) => {

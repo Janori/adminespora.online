@@ -21,7 +21,7 @@
             <br>
             <br>
             <md-input-container class="full-width">
-                <input mdInput placeholder="Proveedor" [mdAutocomplete]="provAuto" [(ngModel)]="data.building.provider"
+                <input mdInput placeholder="Propietario" [mdAutocomplete]="provAuto" [(ngModel)]="data.building.provider"
                        (ngModelChange)="filterProviders($event)">
             </md-input-container>
             <md-autocomplete #provAuto="mdAutocomplete" [displayWith]="displayRenter" >
@@ -31,14 +31,22 @@
             </md-autocomplete>
 
             <md-input-container class="full-width">
+                <input mdInput placeholder="Clave cadastral" [(ngModel)]="data.building.cadastral_key">
+            </md-input-container>
+            <md-input-container class="full-width">
                 <input mdInput placeholder="Dirección" [(ngModel)]="data.building.land.location">
             </md-input-container>
             <md-input-container class="full-width">
                 <input mdInput placeholder="Superficie (m2)" [(ngModel)]="data.building.land.surface" type="number">
             </md-input-container>
-            <md-input-container class="full-width">
+            <md-input-container class="half-width">
                 <input mdInput placeholder="Costo del predial" [(ngModel)]="data.building.land.predial_cost" type="number">
             </md-input-container>
+            <md-form-field class="half-width">
+              <input mdInput [mdDatepicker]="picker" [(ngModel)]="data.building.land.predial_date" placeholder="Fecha pago predial">
+              <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
+              <md-datepicker #picker></md-datepicker>
+            </md-form-field>
             <md-input-container class="full-width">
                 <input mdInput placeholder="Precio de renta" [(ngModel)]="data.building.price" type="number">
             </md-input-container>

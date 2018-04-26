@@ -21,6 +21,7 @@ export class Ticket {
     public extra: string;
     public status: string;
     public request_hash: string;
+    public facturable: boolean;
 
     public created_at: Date;
     public updated_at: Date;
@@ -69,6 +70,7 @@ export class Ticket {
         this.extra = obj && obj.extra || null;
         this.status = obj && obj.status || null;
         this.request_hash = obj && obj.request_hash || null;
+        this.facturable = obj && obj.facturable || null;
 
         this.created_at = obj && obj.created_at || null;
         this.updated_at = obj && obj.updated_at || null;
